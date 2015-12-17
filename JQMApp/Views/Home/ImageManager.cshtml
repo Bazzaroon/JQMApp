@@ -1,0 +1,88 @@
+﻿<div id="imagemanager" data-role="page">
+        <div data-role="header" data-theme="b">
+            <h1>Image Manager</h1>
+            <div class="ui-btn-left" data-role="controlgroup" data-type="horizontal">
+                <a href="javascript:FillUserList()" data-theme="b" data-role="button" data-icon="forward">Main Menu</a>
+                <a href="javascript:pages.PreviousPage()" data-theme="b" data-icon="arrow-l" data-role="button">&nbsp;</a>
+            </div>
+            <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
+                <a href="javascript:pages.NextPage()" data-theme="b" data-icon="arrow-r" data-role="button" data-iconpos="right">&nbsp;</a>
+                <a href="#editor" data-theme="b" data-role="button" data-icon="gear">Edit Page</a>
+            </div>
+    </div>
+    <div id="epanel" style="display:none">
+        <div><label for='xrange'></label><input style="display:none !important" type='range' name='xrange' id='xrange' min='0' max='600' data-theme="b" value="" />X</div>
+        <div style="margin:15px 0 20px 0"><label for='yrange'></label><input style="display:none !important;" type='range' name='yrange' id='yrange' min='0' max='700' data-theme="b" value="" />Y</div>
+       <fieldset data-role='controlgroup' data-mini='true'>
+          <legend>Select Mode</legend>
+            <input type='radio' name='radio-mini' id='radio-mini-1' value='choice-1' checked='checked' />
+            <label for='radio-mini-1'>Scale Image</label>
+            <input type='radio' name='radio-mini' id='radio-mini-2' value='choice-2' />
+            <label for='radio-mini-2'>Move Image</label>
+        </fieldset>
+        <input type="button" id="save" data-inline="true" data-theme="b" data-mini="true" value="Save"/>
+        <input type="button" id="Cancel" data-inline="true" data-theme="b" data-mini="true" value="Cancel" onclick="ClearImageEdit()" />
+    </div>
+
+    <div id="thumbs" class="content">
+        <ul></ul>
+    </div>    
+        <div id="editorpage" style="border:2px solid #808080">
+            
+        </div>
+</div> 
+<div id="upload" data-role="page">
+    <div data-role="header" data-theme="b">
+        <h1>Upload Image</h1>
+    </div>
+    <form method="post" action="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/Home/AddImage" enctype="multipart/form-data" data-ajax="false">
+        <div style="width:250px;margin:20px auto">
+            <input id="uploadfile" name="uploadfile" style="font-family:Verdana;font-size:14pt" type="file" value="Browse" />
+        </div>
+        <div style="width:140px;margin:20px auto">
+            <input id="uploadfilebutton" type="submit" value="Upload" data-theme="b" class="ui-btn-hidden" />
+            <input id="albumid" name="albumid" type="hidden" value="1000" />
+            <input id="userid" name="userid" type="hidden" value="18" />
+        </div>
+    </form>
+</div>
+
+<script>
+
+    if (location.href.indexOf('imagemanager') > -1) {
+        $('#thumbs').mThumbnailScroller({
+            type: 'hover-precise',
+            setHeight:100
+        });
+
+        editor.GetThumbs($('#thumbs ul'), true);
+        var PH = parseInt(($(document).width() * 30) / 100);
+        var WDTH = parseInt((PH * 125) / 100);
+        $('#editorpage').css({ height: WDTH + 'px' });
+
+        $(window).on('resize', function() {
+            var WPH = parseInt(($(document).width() * 30) / 100);
+            var WWDTH = parseInt((WPH * 125) / 100);
+            $('#editorpage').css({ height: WWDTH + 'px' });
+        });
+    }
+    $(document).ready(function () {
+        
+        if($.cookie('userdata') != undefined){    
+            var userdata = JSON.parse($.cookie('userdata'));
+            $('#albumid').val(global.AlbumId);
+            $('#userid').val(userdata.Id);
+        }
+    });
+
+    $("input[type='submit']").click(function () {
+        
+    });
+    
+    function ClearImageEdit() {
+        $('#epanel').hide();
+        $('#editorpage').find(empty();
+    }
+
+</script>
+
