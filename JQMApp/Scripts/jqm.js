@@ -47,6 +47,8 @@ var photo = function() {
     this.Height = 0;
     this.Url = null;
     this.Scale = 0;
+    this.PageNumber = 0;
+    this.AlbumId = 0;
 };
 
 var pageData = function(imagedata) {
@@ -196,8 +198,8 @@ var editor = {
             for (var x = 0; x < thumbs.length; x++) {
                 var source = thumbs[x].Url.toLowerCase();
                 var src = source.replace('.jpg', '_t.jpg');
-                fullSourcePath = $.cookie('location') + src;
-                mkUp += "<li><a href='#'><img onclick='editor.OpenImageEditor(this, true)' src='" + fullSourcePath + "' ui-draggable></img></a><li>";
+                var fullSourcePath = $.cookie('location') + src;
+                mkUp += "<li><a href='#'><img id='" + thumbs[x].Id + "' onclick='editor.OpenImageEditor(this, true)' src='" + fullSourcePath + "' ui-draggable></img></a><li>";
             }
             $(el).append(mkUp);
             if (pages.pgData[global.activePage] != null) {
@@ -215,7 +217,7 @@ var editor = {
     OpenImageEditor: function(G, fromScroller) {
         if (editor.isEditing) return;
         var url = G.src.replace('_t', '');
-        $('#editorpage').append("<div id='eddy'><img src='" + url + "'></div>");
+        $('#editorpage').append("<div id='eddy'><img width='200' id='" + G.id + "' src='" + url + "'></div>");
         editor.isEditing = true;
         $('#epanel').show();
         if (fromScroller) {
@@ -235,21 +237,58 @@ var editor = {
         var pg = pages.pgData[pgIndex];
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = editor.GetScaledUnits(pg.ImageData[x]);
-            $('#editorpage').append("<div style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' height='" + units.h + "' src='" + pg.ImageData[x].Url + "'></img></div>");
+            $('#editorpage').append("<div data-index='" + pg.ImageData[x].Id + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' height='" + units.h + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
         }
     },
-    GetScaledUnits: function(iData){
-        var Units = { l: null, t: null, w: null, h: null }
+    GetScaledUnits: function(iData) {
+        var units = { l: null, t: null, w: null, h: null };
         var ed = $('#editorpage');
         var scale = ed.height() / 750 * 100;
-        Units.h = parseInt((iData.Height * scale) / 100).toString();
-        Units.w = parseInt((iData.Width * scale) / 100).toString();
-        Units.l = (parseInt((iData.OLeft * scale) / 100)) + 'px';
-        Units.t = (parseInt((iData.OTop * scale) / 100)) + 'px';
-        return Units;
+        units.w = Math.ceil((iData.Width * scale) / 100).toString();
+        units.l = (Math.ceil((iData.OLeft * scale) / 100)) + 'px';
+        units.t = (Math.ceil((iData.OTop * scale) / 100)) + 'px';
+        return units;
     },
     Edit: function (G) {
         $('#eddy').attr('id', '');
+    },
+    Save: function() {
+        var ed = $('#editorpage');
+        var scale = Math.ceil(ed.height() / 750 * 100);
+        var P = new photo();
+        if ($('#eddy').attr('data-index') == undefined) {
+            P.Id = 0;
+        } else {
+            P.Id = parseInt($('#eddy').attr('data-index'));
+        }
+        P.OTop = editor.Ceil($('#eddy').css('top'), scale);
+        P.OLeft = editor.Ceil($('#eddy').css('left'), scale);
+        P.Width = editor.Ceil($('#eddy img').attr('width'), scale);
+        P.Url = $('#eddy img').attr('src').replace($.cookie('location'), '');
+        P.AlbumId = global.AlbumId;
+        P.PageNumber = global.activePage;
+        P.GraphicId = parseInt($('#eddy img').attr('id'));
+        
+        if (P.Id == 0) {
+            $.ajax({
+                url: $.cookie('location') + 'Data/AddImageToPage',
+                type: 'post',
+                async: false,
+                data: JSON.stringify(P),
+                success: function(data) {
+                    
+                },
+                error: function() {
+                    alert('Unable to save new image on page');
+                }
+        });
+            
+        }
+    },
+    Ceil: function(css, scale) {
+        var val = parseInt(css.replace('px', ''));
+        var rVal = Math.ceil((val * scale) / 100);
+        return rVal;
     }
 
 

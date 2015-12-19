@@ -32,8 +32,8 @@ namespace JQMApp.App.Models
             JObject photo = JObject.Parse(pic);
 
             var query = "Insert into Photo ";
-            query += "(OTop,OLeft,Width,Height,PageNumber,AlbumId,Front,GraphicId) Values (";
-            query += (int)photo["Y"] + "," + (int)photo["X"] + "," + (int)photo["Width"] + "," + (int)photo["Height"] + "," + (int)photo["PageNumber"] + "," + (int)photo["AlbumId"] + ",'" + (bool)photo["Side"] + "'," + (int)photo["GraphicId"] + ")";
+            query += "(OTop,OLeft,Width,PageNumber,AlbumId,GraphicId) Values (";
+            query += (int)photo["OTop"] + "," + (int)photo["OLeft"] + "," + (int)photo["Width"] + "," + (int)photo["PageNumber"] + "," + (int)photo["AlbumId"] + "," + (int)photo["GraphicId"] + ")";
 
             var cmd = new SqlCommand(query, conn);
             cmd.Connection.Open();
