@@ -243,14 +243,18 @@ var editor = {
     GetScaledUnits: function(iData) {
         var units = { l: null, t: null, w: null, h: null };
         var ed = $('#editorpage');
-        var scale = ed.height() / 750 * 100;
+        var scale = 750 / ed.height() * 100;
         units.w = Math.ceil((iData.Width * scale) / 100).toString();
         units.l = (Math.ceil((iData.OLeft * scale) / 100)) + 'px';
         units.t = (Math.ceil((iData.OTop * scale) / 100)) + 'px';
         return units;
     },
     Edit: function (G) {
-        $('#eddy').attr('id', '');
+        editor.isEditing = false;
+        $('#eddy').removeAttr('id');
+        $(G).parent().attr('id', 'eddy');
+        $('#epanel').show();
+        editor.isEditing = true;
     },
     Save: function() {
         var ed = $('#editorpage');
@@ -269,21 +273,21 @@ var editor = {
         P.PageNumber = global.activePage;
         P.GraphicId = parseInt($('#eddy img').attr('id'));
         
-        if (P.Id == 0) {
             $.ajax({
                 url: $.cookie('location') + 'Data/AddImageToPage',
                 type: 'post',
                 async: false,
                 data: JSON.stringify(P),
                 success: function(data) {
-                    
+                    if (P.Id == 0) {
+                        P.Id = data;
+                        pages.pgData[global.activePage - 1].ImageData.push(P);
+                    }
                 },
                 error: function() {
                     alert('Unable to save new image on page');
                 }
-        });
-            
-        }
+            });
     },
     Ceil: function(css, scale) {
         var val = parseInt(css.replace('px', ''));

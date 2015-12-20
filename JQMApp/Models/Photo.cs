@@ -24,30 +24,55 @@ namespace JQMApp.App.Models
         public int Scale { get; set; }
 
 
-        public void Add(string pic
+        public int Add(string pic
             )
         {
             var conStr = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
             var conn = new SqlConnection(conStr);
             JObject photo = JObject.Parse(pic);
 
-            var query = "Insert into Photo ";
-            query += "(OTop,OLeft,Width,PageNumber,AlbumId,GraphicId) Values (";
-            query += (int)photo["OTop"] + "," + (int)photo["OLeft"] + "," + (int)photo["Width"] + "," + (int)photo["PageNumber"] + "," + (int)photo["AlbumId"] + "," + (int)photo["GraphicId"] + ")";
-
-            var cmd = new SqlCommand(query, conn);
-            cmd.Connection.Open();
-
-            try
+            if ((int) photo["Id"] == 0)
             {
-                cmd.ExecuteNonQuery();
-                cmd.Connection.Close();
+                var query = "Insert into Photo ";
+                query += "(OTop,OLeft,Width,PageNumber,AlbumId,GraphicId) OUTPUT Inserted.Id Values (";
+                query += (int) photo["OTop"] + "," + (int) photo["OLeft"] + "," + (int) photo["Width"] + "," +
+                         (int) photo["PageNumber"] + "," + (int) photo["AlbumId"] + "," + (int) photo["GraphicId"] + ")";
+
+                var cmd = new SqlCommand(query, conn);
+                cmd.Connection.Open();
+
+                try
+                {
+                    var id = cmd.ExecuteScalar();
+                    cmd.Connection.Close();
+                    return (int) id;
+                }
+                catch (SqlException exception)
+                {
+                    cmd.Connection.Close();
+                }
             }
-            catch (SqlException exception)
+            else
             {
-                cmd.Connection.Close();
+                string query = "Update photo set OTop = " + (int) photo["OTop"] + ", OLeft = " + (int) photo["OLeft"];
+                query += ", Width = " + (int) photo["width"] + ", PageNumber = " + (int) photo["PageNUmber"];
+                query += ", AlbumId = " + (int) photo["AlbumId"] + ", GraphicId = " + (int) photo["GraphicId"];
+                
+                var cmd = new SqlCommand(query, conn);
+                cmd.Connection.Open();
+
+                try
+                {
+                    var id = cmd.ExecuteNonQuery();
+                    cmd.Connection.Close();
+                }
+                catch (SqlException exception)
+                {
+                    cmd.Connection.Close();
+                }
             }
 
+            return -1;
         }
 
     }

@@ -13,6 +13,7 @@ namespace JQMApp.App.Models
         public int Height { get; set; }
         public string Url { get; set; }
         public int Scale { get; set; }
+        public int Id { get; set; }
 
     }
 }
