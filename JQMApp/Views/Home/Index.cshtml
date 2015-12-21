@@ -121,7 +121,7 @@
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         var data = jax.GetData(query);
         for (var p=0; p<data.length; p++) {
-            mkUp += "<li data-inset='true'><a href='#'>" + data[p].Email + "</a></li>";
+            mkUp += "<li data-inset='true'><a role-transition='flip' rel='external' href='/JQMApp/SiteUser?user='" + data[p].Email + ">" + data[p].Email + "</a></li>";
         }
         $('#llist').append(mkUp);
         $('#llist').listview('refresh', true);

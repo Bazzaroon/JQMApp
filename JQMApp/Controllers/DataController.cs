@@ -29,6 +29,13 @@ namespace JQMApp.Controllers
         }
 
         [HttpGet]
+        public void DeletePhoto(int Id)
+        {
+            var photo = new Photo();
+            photo.Delete(Id);
+        }
+
+        [HttpGet]
         public string GetPhotosForPage(int albumId, int pageNumber)
         {
             var data = new WeddingData();

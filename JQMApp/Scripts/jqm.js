@@ -137,7 +137,7 @@ var editor = {
     isEditing: false,
     imageId: null,
     imagePhoto: null,
-    GetThumbs: function (el, pfx) {
+    GetThumbs: function(el, pfx) {
         var offset = 0;
         $('#thumbs').mThumbnailScroller({
             type: 'hover-precise',
@@ -153,39 +153,40 @@ var editor = {
             $('#editorpage').css({ margin: '10px auto' })
         }
 
-        $(window).on('resize', function () {
+        $(window).on('resize', function() {
             offset = $(document).height() > $(document).width() ? 250 : 185;
             aHeight = $(document).height() - offset;
             aWidth = parseInt((aHeight * 80) / 100);
             $('#editorpage').css({ height: aHeight + 'px', width: aWidth + 'px' });
-            if(offset > 185){
-                $('#editorpage').css({ margin: '10px 0 0 20px' })
+            if (offset > 185) {
+                $('#editorpage').css({ margin: '10px 0 0 20px' });
             } else {
-                $('#editorpage').css({ margin: '10px auto' })
+                $('#editorpage').css({ margin: '10px auto' });
             }
+            editor.ShowPage();
         });
 
-        $('#xrange').on('change', function (event) {
+        $('#xrange').on('change', function(event) {
             if ($('#radio-mini-1').prop('checked')) {
                 $('#eddy img').attr('width', $('#xrange').val());
             }
             if ($('#radio-mini-2').prop('checked')) {
-                $('#eddy').css({ left: $('#xrange').val() + 'px'});
+                $('#eddy').css({ left: $('#xrange').val() + 'px' });
             }
         });
 
-        $('#yrange').on('change', function (event) {
+        $('#yrange').on('change', function(event) {
             if ($('#radio-mini-2').prop('checked')) {
                 $('#eddy').css({ top: $('#yrange').val() + 'px' });
             }
         });
 
-        $('#radio-mini-2').on('click', function () {
+        $('#radio-mini-2').on('click', function() {
             $('#xrange').val(parseInt($('#eddy').css('left'))).slider('refresh');
             $('#yrange').val(parseInt($('#eddy').css('top'))).slider('refresh');
             $('#yrange').slider('enable');
         });
-        $('#radio-mini-1').on('click', function () {
+        $('#radio-mini-1').on('click', function() {
             $('#yrange').slider('disable');
             $('#xrange').val($('#eddy img').attr('width')).slider('refresh');
             $('#yrange').val('#eddy').css('width').slider('refresh');
@@ -193,26 +194,26 @@ var editor = {
 
         var mkUp = '';
         var mpfx = pfx ? '../' : '';
-            var query = "Data/GetAllThumbs?albumId=" + global.AlbumId;
-            var thumbs = jax.GetData(query);
-            for (var x = 0; x < thumbs.length; x++) {
-                var source = thumbs[x].Url.toLowerCase();
-                var src = source.replace('.jpg', '_t.jpg');
-                var fullSourcePath = $.cookie('location') + src;
-                mkUp += "<li><a href='#'><img id='" + thumbs[x].Id + "' onclick='editor.OpenImageEditor(this, true)' src='" + fullSourcePath + "' ui-draggable></img></a><li>";
-            }
-            $(el).append(mkUp);
-            if (pages.pgData[global.activePage] != null) {
-                editor.ShowPage();
-            }
+        var query = "Data/GetAllThumbs?albumId=" + global.AlbumId;
+        var thumbs = jax.GetData(query);
+        for (var x = 0; x < thumbs.length; x++) {
+            var source = thumbs[x].Url.toLowerCase();
+            var src = source.replace('.jpg', '_t.jpg');
+            var fullSourcePath = $.cookie('location') + src;
+            mkUp += "<li><a href='#'><img id='" + thumbs[x].Id + "' onclick='editor.OpenImageEditor(this, true)' src='" + fullSourcePath + "' ui-draggable></img></a><li>";
+        }
+        $(el).append(mkUp);
+        if (pages.pgData[global.activePage] != null) {
+            editor.ShowPage();
+        }
     },
-    GetPage: function (pagenumber) {
+    GetPage: function(pagenumber) {
         var query = "/Data/GetPhotosForPage?albumId=" + global.AlbumId + "&pageNumber=" + pagenumber;
         var pics = jax.GetData(query);
-        
+
     },
     SetPageSize: function() {
-        
+
     },
     OpenImageEditor: function(G, fromScroller) {
         if (editor.isEditing) return;
@@ -226,37 +227,53 @@ var editor = {
         }
 
     },
-    MapEddyToPhoto: function(){
+    MapEddyToPhoto: function() {
         var E = $('#eddy');
         E.css({ left: photo.OLeft + 'px', top: photo.OTop + 'px', width: photo.Width + 'px', height: '100px' });
     },
-    ShowPage: function () {
+    ShowPage: function() {
         $('#editorpage').empty();
         $('#imagemanager h1').text('Page ' + global.activePage);
         var pgIndex = parseInt(global.activePage) - 1;
         var pg = pages.pgData[pgIndex];
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = editor.GetScaledUnits(pg.ImageData[x]);
-            $('#editorpage').append("<div data-index='" + pg.ImageData[x].Id + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' height='" + units.h + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+            $('#editorpage').append("<div data-image-index='" + x + "' data-index='" + pg.ImageData[x].Id + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' height='" + units.h + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
         }
     },
     GetScaledUnits: function(iData) {
         var units = { l: null, t: null, w: null, h: null };
         var ed = $('#editorpage');
-        var scale = 750 / ed.height() * 100;
+        var scale = ed.height() / 750 * 100;
         units.w = Math.ceil((iData.Width * scale) / 100).toString();
         units.l = (Math.ceil((iData.OLeft * scale) / 100)) + 'px';
         units.t = (Math.ceil((iData.OTop * scale) / 100)) + 'px';
         return units;
     },
-    Edit: function (G) {
+    Edit: function(G) {
         editor.isEditing = false;
         $('#eddy').removeAttr('id');
         $(G).parent().attr('id', 'eddy');
+        $(G).css({ border: '2px solid Red' });
         $('#epanel').show();
         editor.isEditing = true;
     },
+    Cancel: function() {
+        if ($('#eddy').attr('data-index') != 0) {
+            if (confirm('Remove this image?')) {
+                editor.RemoveImage();
+                return;
+            }
+        }
+
+        if ($('#eddy').attr('data-index') == 0) {
+            $('#eddy').remove();
+        } else {
+            $('#eddy img').css({ border: 'none' });
+        }
+    },
     Save: function() {
+        if (!confirm('Update image?')) return;
         var ed = $('#editorpage');
         var scale = Math.ceil(ed.height() / 750 * 100);
         var P = new photo();
@@ -272,27 +289,44 @@ var editor = {
         P.AlbumId = global.AlbumId;
         P.PageNumber = global.activePage;
         P.GraphicId = parseInt($('#eddy img').attr('id'));
-        
-            $.ajax({
-                url: $.cookie('location') + 'Data/AddImageToPage',
-                type: 'post',
-                async: false,
-                data: JSON.stringify(P),
-                success: function(data) {
-                    if (P.Id == 0) {
-                        P.Id = data;
-                        pages.pgData[global.activePage - 1].ImageData.push(P);
-                    }
-                },
-                error: function() {
-                    alert('Unable to save new image on page');
+
+        $.ajax({
+            url: $.cookie('location') + 'Data/AddImageToPage',
+            type: 'post',
+            async: false,
+            data: JSON.stringify(P),
+            success: function(data) {
+                if (P.Id == 0) {
+                    P.Id = data;
+                    pages.pgData[global.activePage - 1].ImageData.push(P);
                 }
-            });
+                editor.isEditing = false;
+                $('#eddy').removeAttr('id');
+            },
+            error: function() {
+                alert('Unable to save new image on page');
+            }
+        });
     },
     Ceil: function(css, scale) {
         var val = parseInt(css.replace('px', ''));
         var rVal = Math.ceil((val * scale) / 100);
         return rVal;
+    },
+    RemoveImage: function() {
+        $.ajax({
+            url: $.cookie('location') + 'Data/DeletePhoto?Id=' + $('#eddy').attr('data-index'),
+            type:'get',
+            async:false,
+            error:function() {
+                alert('Unable to delete photo');
+            },
+            success:function() {
+                pages.pgData[global.activePage - 1].ImageData.splice([parseInt($('#eddy').attr('data-image-index'))], 1);
+                $('#eddy').remove();
+                editor.isEditing = false;
+            }
+        });
     }
 
 

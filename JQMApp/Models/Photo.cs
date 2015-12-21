@@ -23,12 +23,12 @@ namespace JQMApp.App.Models
         public int GraphicId { get; set; }
         public int Scale { get; set; }
 
+        static string conStr = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
+        SqlConnection conn = new SqlConnection(conStr);
 
         public int Add(string pic
             )
         {
-            var conStr = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
-            var conn = new SqlConnection(conStr);
             JObject photo = JObject.Parse(pic);
 
             if ((int) photo["Id"] == 0)
@@ -73,6 +73,24 @@ namespace JQMApp.App.Models
             }
 
             return -1;
+        }
+
+        public void Delete(int Id)
+        {
+            string query = "delete from photo where Id = " + Id.ToString();
+            var cmd = new SqlCommand(query, conn);
+            cmd.Connection.Open();
+
+            try
+            {
+                var id = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+            }
+            catch (SqlException exception)
+            {
+                cmd.Connection.Close();
+            }
+
         }
 
     }

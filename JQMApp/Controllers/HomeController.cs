@@ -82,7 +82,7 @@ namespace JQMApp.Controllers
 
             TempData["uploaded"] = "uploaded";
 
-            Response.Redirect("#imagemanager");
+            Response.Redirect("/JQMApp/SiteUser");
 
             return null;
 
