@@ -121,3 +121,8 @@
     position:absolute;
     z-index:500;
 }
+#gslide {
+    width: 200px;
+    height: 200px;
+    background-color: maroon;
+}
