@@ -122,7 +122,27 @@
     z-index:500;
 }
 #gslide {
-    width: 200px;
-    height: 200px;
-    background-color: maroon;
+    margin: 0 auto;
+}
+.showContainer{
+	margin:0 auto;
+    width: 996px;
+    min-height: 300px;
+}
+
+.scroller {
+    width: 10000px;
+}
+.slidemenu {
+    height: 35px;
+    width: 100%;
+    background:-webkit-linear-gradient(#6daad3, #456f9a)
+}
+.pgwSlideshow {
+    padding-left: 0 !important;
+    -webkit-padding-start: 0;
+}
+* {
+    margin: 0;
+    padding: 0;
 }

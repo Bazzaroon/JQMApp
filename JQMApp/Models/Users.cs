@@ -60,6 +60,13 @@ namespace JQMApp.Models
         {
             throw new NotImplementedException();
         }
+
+        public Users GetById(int id)
+        {
+            string query = "select * from Users where Id = " + id.ToString();
+            var data = new WeddingData();
+            return data.ExecuteObject<Users>(query).FirstOrDefault();
+        }
     }
 
 }

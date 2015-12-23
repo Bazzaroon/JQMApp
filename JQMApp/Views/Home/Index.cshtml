@@ -12,6 +12,7 @@
     <link href="~/Content/jquery.mobile.theme-1.1.2.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.mobile-1.1.2.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.mThumbnailScroller.css" rel="stylesheet" />
+    <link href="~/Content/pgwslideshow.css" rel="stylesheet" />
 
     <script src="~/Scripts/jquery-1.8.2.js"></script>
     <script src="~/Scripts/jquery.cookie.js"></script>
@@ -21,6 +22,7 @@
     <link href="~/Content/jqm.css" rel="stylesheet" />
     <script src="~/Scripts/jqm.js"></script>
     <script src="~/Scripts/2.3.0-crypto-sha1.js"></script>
+    <script src="~/Scripts/pgwslideshow.min.js"></script>
 
 </head>
 
@@ -89,9 +91,9 @@
         if ($.cookie('userdata') != undefined) {
             var user = JSON.parse($.cookie('userdata'));
             $('#home div h1').text('Welcome back ' + user.UserName);
-            $('#loginbutton').remove();
+            $('#loginbutton').hide();
             $('#viewbutton').show();
-            if (user.Administrator && global.ScreenWidth > 500) {
+            if (user.Administrator && !IsMobile()) {
                 $('#editbutton').show();
             }
         }
@@ -113,15 +115,18 @@
     
     function FillUserList() {
         var mkUp = '';
+        var uData = JSON.parse($.cookie('userdata'));
         $.mobile.changePage('#chooseview');
         var query = 'Data/GetUserAddresses?albumId=' + global.AlbumId;
         $('#llist').empty();
-        $('#llist').append("<li><a href='javascript:pages.Show(1)'>Damian and Leisha's Album</a></li>");
-        $('#llist').append("<li><a href='#'>Slide Show</a></li>");
+        $('#llist').append("<li><a href='javascript:pages.Show(1)'>" + uData.Name + "</a></li>");
+        $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
+        $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
         var data = jax.GetData(query);
-        for (var p=0; p<data.length; p++) {
-            mkUp += "<li data-inset='true'><a role-transition='flip' rel='external' href='/JQMApp/SiteUser'" + data[p].Email + ">" + data[p].Email + "</a></li>";
+        var uData = JSON.parse($.cookie('userdata'));
+        for (var p = 0; p < data.length; p++) {
+            mkUp += "<li data-inset='true'><a role-transition='flip' rel='external' href='/JQMApp/SiteUser/Index/" + data[p].Id + "'>" + data[p].Email + "</a></li>";
         }
         $('#llist').append(mkUp);
         $('#llist').listview('refresh', true);
@@ -139,7 +144,21 @@
             pages.AddPage(x+1);
         }
     }
+    function Logout() {
+        $.removeCookie('userdata', { path: '/' });
+        $('#viewbutton').hide();
+        $.mobile.changePage($.cookie('location') + '/Home', { reloadPage: true, transition: 'flip' });
 
+    }
+    
+    function IsMobile() {
+        var isMobile = false;
+        var minDim = Math.min($(window).width(), $(window).height());
+        if (minDim < 500) {
+            isMobile = true;
+        }
+        return isMobile;
+    }
 
 
 </script>

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc.Html;
 using JQMApp.Models;
 
 
@@ -44,5 +45,21 @@ namespace JQMApp.App.Models
             var data = new WeddingData();
             return data.ExecuteObject<GraphicItem>(query).FirstOrDefault();
         }
+
+        public IEnumerable<GraphicItem> GetAllForUser(int userId)
+        {
+            string query = string.Empty;
+            if (userId == 0)
+            {
+                query = "select * from Graphic";
+            }
+            else
+            {
+                query = "select * from Graphic where UserId = " + userId.ToString();
+            }
+            var data = new WeddingData();
+            return data.ExecuteObject<GraphicItem>(query).ToList();
+        }
+
     }
 }

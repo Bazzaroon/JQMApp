@@ -1,4 +1,5 @@
 ﻿@{
+    @model IEnumerable<JQMApp.App.Models.GraphicItem>
     Layout = null;
 }
 
@@ -18,20 +19,33 @@
         <script src="~/Scripts/jquery.cookie.js"></script>
         <script src="~/Scripts/UserPage.js"></script>
         <script src="~/Scripts/jquery.mobile-1.1.2.min.js"></script>
+        <script src="~/Scripts/jquery.mThumbnailScroller.js"></script>
 
     </head>
-    <body>
+    <body style="margin:0">
         <div id="userhome" data-role="page" data-theme="b" data-content-theme="b">
-            <div data-role="header" data-theme="b">
-                <h1>Images for </h1>
+            <div data-role="header" data-theme="b" data-position="fixed">
+                <h1>Images for @(ViewBag.UserEmail)</h1>
                 <a rel="external" href="/JQMApp/Home" data-icon="forward">Main Menu</a> 
+            </div>
+            <div class="showContainer">
+                <ul id="pgwSlide">
+                    @foreach (var slide in Model)
+                    {
+                        <li ><img src="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/@slide.Url"></img></li>
+                    }
+                </ul>                
             </div>
         </div>
 
     </body>
 </html>
 <script>
-    $(document).delegate('#userhome', 'pageinit', function() {
-        userPage.Create();
+    $(document).ready(function() {
+        var W = $(window).width();
+        var actualWidth = W > 966 ? 966 : W;
+        actualWidth -= 100;
+        $('.showContainer').css({width:actualWidth + 'px'});
+        $('#pgwSlide li img').attr('width', '100%');
     });
 </script>
