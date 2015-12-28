@@ -238,7 +238,7 @@ var editor = {
         var pg = pages.pgData[pgIndex];
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = editor.GetScaledUnits(pg.ImageData[x]);
-            $('#editorpage').append("<div data-image-index='" + x + "' data-index='" + pg.ImageData[x].Id + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' height='" + units.h + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+            $('#editorpage').append("<div class='photoclass' data-image-index='" + x + "' data-index='" + pg.ImageData[x].GraphicId + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
         }
     },
     GetScaledUnits: function(iData) {
@@ -275,7 +275,7 @@ var editor = {
     Save: function() {
         if (!confirm('Update image?')) return;
         var ed = $('#editorpage');
-        var scale = Math.ceil(ed.height() / 750 * 100);
+        var scale = 750 / Math.ceil(ed.height()) * 100;
         var P = new photo();
         if ($('#eddy').attr('data-index') == undefined) {
             P.Id = 0;
@@ -288,7 +288,8 @@ var editor = {
         P.Url = $('#eddy img').attr('src').replace($.cookie('location'), '');
         P.AlbumId = global.AlbumId;
         P.PageNumber = global.activePage;
-        P.GraphicId = parseInt($('#eddy img').attr('id'));
+        var graphicId = P.Id == 0 ? parseInt($('#eddy img').attr('id')) : parseInt($('#eddy').attr('data-index'));
+        P.GraphicId = graphicId;
 
         $.ajax({
             url: $.cookie('location') + 'Data/AddImageToPage',
@@ -299,8 +300,12 @@ var editor = {
                 if (P.Id == 0) {
                     P.Id = data;
                     pages.pgData[global.activePage - 1].ImageData.push(P);
+                } else {
+                    pages.pgData[global.activePage - 1].ImageData[$('#eddy').attr('data-image-index')] = P;
+                    $('#eddy img').css({ border: 'none' });
                 }
                 editor.isEditing = false;
+                $('#eddy').css({ position:'absolute'  });
                 $('#eddy').removeAttr('id');
             },
             error: function() {

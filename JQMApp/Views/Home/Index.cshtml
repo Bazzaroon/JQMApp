@@ -119,7 +119,7 @@
         $.mobile.changePage('#chooseview');
         var query = 'Data/GetUserAddresses?albumId=' + global.AlbumId;
         $('#llist').empty();
-        $('#llist').append("<li><a href='javascript:pages.Show(1)'>" + uData.Name + "</a></li>");
+        $('#llist').append("<li><a href='javascript:pages.Show(1)'>" + global.Album[0].Name + "</a></li>");
         $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");

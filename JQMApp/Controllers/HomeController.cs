@@ -5,8 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using JQMApp.App.Models;
 using JQMApp.Models;
+using Newtonsoft.Json.Linq;
 
 namespace JQMApp.Controllers
 {
@@ -54,7 +56,7 @@ namespace JQMApp.Controllers
             request.Proxy = null;
             request.UseBinary = true;
             string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"]; 
-            if ( hostName == "192.168.0.2" || hostName == "localhost")
+            if ( hostName == "192.168.0.8" || hostName == "localhost")
             {
                 request.Credentials = new NetworkCredential("Barry Tait", "repro20");
             }
@@ -82,9 +84,11 @@ namespace JQMApp.Controllers
 
             TempData["uploaded"] = "uploaded";
 
-            Response.Redirect("/JQMApp/SiteUser");
+            var cookie = Server.UrlDecode(Request.Cookies["userdata"].Value);
+            
+            JObject J = JObject.Parse(cookie);
 
-            return null;
+            return RedirectToAction("Index", "SiteUser", new {id = (int)J["Id"]});
 
         }
 
@@ -104,7 +108,7 @@ namespace JQMApp.Controllers
             request.Proxy = null;
             request.UseBinary = true;
             string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"];
-            if (hostName == "192.168.0.2" || hostName == "localhost")
+            if (hostName == "192.168.0.8" || hostName == "localhost")
             {
                 request.Credentials = new NetworkCredential("Barry Tait", "repro20");
             }

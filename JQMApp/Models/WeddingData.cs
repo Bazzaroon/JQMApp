@@ -26,7 +26,7 @@ namespace JQMApp.Models
         public string GetPhotosForPage(int albumId, int pageNUmber)
         {
             string json = string.Empty;
-            string query = "select p.OTop, p.OLeft, p.Width, p.Height, g.Url, p.Scale, p.Id ";
+            string query = "select p.OTop, p.OLeft, p.Width, p.Height, g.Url, p.Scale, p.Id, p.GraphicId ";
             query += "from Photo p join Graphic g on p.GraphicId = g.Id where p.albumId = " + albumId + " and p.pageNumber = " + pageNUmber;
 
             var photos = ExecuteObject<RevisedImage>(query);

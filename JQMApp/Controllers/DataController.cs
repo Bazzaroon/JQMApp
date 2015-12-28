@@ -64,7 +64,7 @@ namespace JQMApp.Controllers
         }
 
         [HttpPost]
-        public void AddImageToPage()
+        public int AddImageToPage()
         {
             string P = string.Empty;
             using (var reader = new StreamReader(HttpContext.Request.InputStream))
@@ -72,7 +72,7 @@ namespace JQMApp.Controllers
                 P = reader.ReadToEnd();
             }
             var _photo = new Photo();
-            _photo.Add(P);
+            return _photo.Add(P);
         }
 
         [HttpGet]

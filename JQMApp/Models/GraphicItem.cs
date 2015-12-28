@@ -23,17 +23,20 @@ namespace JQMApp.App.Models
 
         public string Url { get; set; }
 
+        public DateTime CaptureDate { get; set; }
+
 
 
         public void Add(string fileStream, int albumId, int userId)
         {
             conn.ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
             conn.Open();
-            using (SqlCommand command = new SqlCommand("INSERT INTO Graphic(Url, AlbumId, UserId) VALUES (@binaryValue, @albumId, @userId)", conn))
+            using (SqlCommand command = new SqlCommand("INSERT INTO Graphic(Url, AlbumId, UserId, CaptureDate) VALUES (@binaryValue, @albumId, @userId, @captureDate)", conn))
             {
                 command.Parameters.Add("@binaryValue", SqlDbType.Text, fileStream.Length).Value = fileStream;
                 command.Parameters.Add("@albumId", SqlDbType.Int).Value = albumId;
                 command.Parameters.Add("@userId", SqlDbType.Int).Value = userId;
+                command.Parameters.Add("@captureDate", SqlDbType.DateTime).Value = DateTime.Now;
                 command.ExecuteNonQuery();
             }
             conn.Close();
@@ -55,7 +58,7 @@ namespace JQMApp.App.Models
             }
             else
             {
-                query = "select * from Graphic where UserId = " + userId.ToString();
+                query = "select * from Graphic where UserId = " + userId.ToString() + " order by CaptureDate ASC";
             }
             var data = new WeddingData();
             return data.ExecuteObject<GraphicItem>(query).ToList();

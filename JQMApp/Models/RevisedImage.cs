@@ -14,6 +14,7 @@ namespace JQMApp.App.Models
         public string Url { get; set; }
         public int Scale { get; set; }
         public int Id { get; set; }
+        public int GraphicId { get; set; }
 
     }
 }

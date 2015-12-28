@@ -29,10 +29,10 @@
                 <a rel="external" href="/JQMApp/Home" data-icon="forward">Main Menu</a> 
             </div>
             <div class="showContainer">
-                <ul id="pgwSlide">
+                <ul id="pgwSlide" style="list-style-type:none">
                     @foreach (var slide in Model)
                     {
-                        <li ><img src="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/@slide.Url"></img></li>
+                        <li><img src="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/@slide.Url"></img></li>
                     }
                 </ul>                
             </div>

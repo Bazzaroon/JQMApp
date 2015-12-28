@@ -35,8 +35,8 @@ namespace JQMApp.App.Models
             {
                 var query = "Insert into Photo ";
                 query += "(OTop,OLeft,Width,PageNumber,AlbumId,GraphicId) OUTPUT Inserted.Id Values (";
-                query += (int) photo["OTop"] + "," + (int) photo["OLeft"] + "," + (int) photo["Width"] + "," +
-                         (int) photo["PageNumber"] + "," + (int) photo["AlbumId"] + "," + (int) photo["GraphicId"] + ")";
+                query += (int) photo["OTop"] + ", " + (int) photo["OLeft"] + ", " + (int) photo["Width"] + ", " +
+                         (int) photo["PageNumber"] + ", " + (int) photo["AlbumId"] + ", " + (int) photo["GraphicId"] + ")";
 
                 var cmd = new SqlCommand(query, conn);
                 cmd.Connection.Open();
@@ -55,8 +55,9 @@ namespace JQMApp.App.Models
             else
             {
                 string query = "Update photo set OTop = " + (int) photo["OTop"] + ", OLeft = " + (int) photo["OLeft"];
-                query += ", Width = " + (int) photo["width"] + ", PageNumber = " + (int) photo["PageNUmber"];
+                query += ", Width = " + (int) photo["Width"] + ", PageNumber = " + (int) photo["PageNumber"];
                 query += ", AlbumId = " + (int) photo["AlbumId"] + ", GraphicId = " + (int) photo["GraphicId"];
+                query += " where Id = " + (int) photo["Id"];
                 
                 var cmd = new SqlCommand(query, conn);
                 cmd.Connection.Open();
