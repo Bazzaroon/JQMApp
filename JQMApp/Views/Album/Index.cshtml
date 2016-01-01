@@ -16,10 +16,12 @@
         <script src="~/Scripts/jquery-1.8.2.js"></script>
         <script src="~/Scripts/jquery-ui.js"></script>
         <script src="~/Scripts/pgwslideshow.min.js"></script>
+        <script src="~/Scripts/jquery.cookie.js"></script>
+
     </head>
     <body style="margin:0">
         <div>
-            <div class="slidemenu"></div>
+            <div onclick="GoToMenu()" class="mainmenubutton">Home Page</div>
             <div class="showContainer">
                 <ul style="padding:0 !important; background-color:white !important" class="pgwSlideshow">
                     @foreach (var slide in Model)
@@ -34,6 +36,7 @@
 
 <script>
     $(document).ready(function () {
+        ResizeWidth();
         var pgShow = $('.pgwSlideshow').pgwSlideshow({
             autoSlide: true,
             displayControls:false
@@ -41,8 +44,16 @@
     });
 
     $(window).on('resize', function() {
-        var SW = $(window).width() > 966 ? 966 : $(window).width();
-        $('.showContainer').css({ width: SW + 'px' });
+        ResizeWidth();
     });
+    
+    function GoToMenu() {
+        location.href = $.cookie('location');
+    }
+    
+    function ResizeWidth() {
+        var SW = $(window).width() > 966 ? 966 : ($(window).width() - 50);
+        $('.showContainer').css({ width: SW + 'px' });
+    }
     
 </script>

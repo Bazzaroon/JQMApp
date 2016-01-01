@@ -134,6 +134,7 @@
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SiteUserController.cs" />
+    <Compile Include="Controllers\WeddingAlbumController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -235,6 +236,7 @@
     <Content Include="Images\cover.png" />
     <Content Include="Images\homepage.jpg" />
     <Content Include="Images\IMG_1012.JPG" />
+    <Content Include="Images\pgBg.png" />
     <Content Include="Images\them2.jpg" />
     <Content Include="Scripts\2.3.0-crypto-sha1.js" />
     <Content Include="Scripts\jqm.js" />
@@ -283,6 +285,8 @@
     <Content Include="Views\Home\Notify.cshtml" />
     <Content Include="Views\SiteUser\Index.cshtml" />
     <Content Include="Views\Album\Index.cshtml" />
+    <Content Include="Views\Shared\_AlbumLayout.cshtml" />
+    <Content Include="Views\WeddingAlbum\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

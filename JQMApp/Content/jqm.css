@@ -42,6 +42,9 @@
     width: 30%;
     margin: 5px auto;
     position:relative;
+    background-image: url(/JQMApp/Images/pgBg.png);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .scroller {
     
@@ -133,11 +136,6 @@
 .scroller {
     width: 10000px;
 }
-.slidemenu {
-    height: 35px;
-    width: 100%;
-    background: -webkit-linear-gradient(#6daad3, #456f9a);
-}
 .pgwSlideshow {
     padding-left: 0 !important;
     -webkit-padding-start: 0;
@@ -146,6 +144,18 @@
     margin: 0;
     padding: 0;
 }
-.photoclass {
-    box-shadow: 5px 5px 5px #aaaaaa;
+
+.mainmenubutton {
+    border-radius: 5px;
+    background: -webkit-linear-gradient(#6daad3, #456f9a);
+    width: 120px;
+    height: 27px;
+    font-family: arial;
+    font-size: 11pt;
+    text-align: center;
+    line-height: 27px;
+    border: 1px inset #3a5e81;
+    color: white;
+    cursor: pointer;
+    margin: 3px 0 0 5px;
 }
