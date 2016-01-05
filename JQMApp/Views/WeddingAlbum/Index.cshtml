@@ -5,78 +5,34 @@
     Layout = "~/Views/Shared/_AlbumLayout.cshtml";
 }
 
-<h2>Index</h2>
+<div id="container" class="container" align="center">
+    <div id="cover">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+    </div>
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Url)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OTop)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.OLeft)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Width)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Height)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PageNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AlbumId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.GraphicId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Scale)
-        </th>
-        <th></th>
-    </tr>
+<script>
+    var album = JSON.parse($.cookie('album'));
+    
+    $(document).ready(function () {
+        album = JSON.parse($.cookie('album'));
+        jqmView.Init();
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Url)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OTop)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.OLeft)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Width)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Height)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PageNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AlbumId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.GraphicId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Scale)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+        $('#editorpage').click(function() {
+            $(this).addClass('flip');
+        });
+    });
 
-</table>
+    function LoadPages() {
+        pages.Add(album[0].Id);
+        for (var x = 0; x < album[0].PageCount; x++) {
+            pages.AddPage(x + 1);
+        }
+
+    }
+    
+
+
+</script>
+

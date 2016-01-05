@@ -33,6 +33,8 @@
     function GotoPage() {
         var selectedPage = $('#pages-slider').val();
         $.mobile.changePage('#imagemanager');
+        global.activePage = parseInt(selectedPage);
+        editor.ShowPage();
         editor.isEditor = true;
         editor.GetThumbs($('#thumbs ul'), false, false);
     }

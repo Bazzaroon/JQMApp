@@ -240,6 +240,7 @@
     <Content Include="Images\them2.jpg" />
     <Content Include="Scripts\2.3.0-crypto-sha1.js" />
     <Content Include="Scripts\jqm.js" />
+    <Content Include="Scripts\jqmViewer.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />

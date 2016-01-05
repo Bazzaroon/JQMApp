@@ -88,11 +88,12 @@
         $('#viewbutton').hide();
         var loc = 'http://' + location.host + '/JQMApp/';
         $.cookie('location', loc, { expires: 30, path: '/' });
-        if(global.Album == null){
-            var query = 'Data/GetAlbumDetails?albumId=' + global.AlbumId;
+
+        var query = 'Data/GetAlbumDetails?albumId=' + global.AlbumId;
             global.Album = jax.GetData(query, ' album ');
-        }
-        
+            $.cookie('album', JSON.stringify(global.Album), { expires: 30, path: '/' });
+            album = $.cookie('album');
+
         if ($.cookie('userdata') != undefined) {
             var user = JSON.parse($.cookie('userdata'));
             $('#home div h1').text('Welcome back ' + user.UserName);
@@ -124,7 +125,7 @@
         $.mobile.changePage('#chooseview');
         var query = 'Data/GetUserAddresses?albumId=' + global.AlbumId;
         $('#llist').empty();
-        $('#llist').append("<li><a  rel='external' href='/WeddingAlbum'>" + global.Album[0].Name + "</a></li>");
+        $('#llist').append("<li><a  rel='external' href='" + $.cookie('location') + "WeddingAlbum'>" + global.Album[0].Name + "</a></li>");
         $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");

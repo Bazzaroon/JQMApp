@@ -1,4 +1,5 @@
-﻿var global = {
+﻿var album = null;
+var global = {
     imageId: -1,
     Album: null,
     AlbumId: 1000,
@@ -76,7 +77,8 @@ var pages = {
         
     },
     Add: function (albumId) {
-        for (var x = 0; x < global.Album[0].PageCount; x++) {
+        var myAlbum = JSON.parse($.cookie('album'));
+        for (var x = 0; x < myAlbum[0].PageCount; x++) {
             var photos = pages.GetPhotos(albumId, (x+1));
             var pics = new Array();
             var NP = new pageData();
@@ -138,7 +140,9 @@ var editor = {
     isEditing: false,
     imageId: null,
     imagePhoto: null,
-    GetThumbs: function(el, pfx) {
+    pageDisplayed:$('.front'),
+
+    GetThumbs: function (el, pfx) {
         var offset = 0;
         if (editor.isEditor) {
             $('#thumbs').mThumbnailScroller({
@@ -146,7 +150,8 @@ var editor = {
                 setHeight: 100
             });
         }
-
+        $(el).empty();
+        
         offset = $(document).height() > $(document).width() ? 250 : 185;
         aHeight = $(document).height() - offset;
         aWidth = parseInt((aHeight * 80) / 100);
@@ -170,7 +175,8 @@ var editor = {
             editor.ShowPage();
         });
 
-        $('#xrange').on('change', function(event) {
+        
+        $('#xrange').on('change', function (event) {
             if ($('#radio-mini-1').prop('checked')) {
                 $('#eddy img').attr('width', $('#xrange').val());
             }
@@ -214,8 +220,13 @@ var editor = {
         if (pages.pgData[global.activePage] != null) {
             editor.ShowPage();
         }
+        
+        if (!editor.isEditor) {
+            $('#editorpage').append("<div onclick='editor.FlipPage(0)' style='position:absolute;width:100px;height:100%;cursor:pointer;right:0;top:0'></div>");
+        }
     },
-    GetPage: function(pagenumber) {
+    
+    GetPage: function (pagenumber) {
         var query = "/Data/GetPhotosForPage?albumId=" + global.AlbumId + "&pageNumber=" + pagenumber;
         var pics = jax.GetData(query);
 
@@ -247,14 +258,36 @@ var editor = {
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = editor.GetScaledUnits(pg.ImageData[x]);
             if (editor.isEditor) {
-                $('#editorpage').append("<div class='photoclass' data-image-index='" + x + "' data-index='" + pg.ImageData[x].GraphicId + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+                $('#editorpage').append("<div class='photoclass' data-photo-id='" + pg.ImageData[x].Id + "' data-image-index='" + x + "' data-index='" + pg.ImageData[x].GraphicId + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
             } else {
-                $('#editorpage').append("<div class='photoclass' data-image-index='" + x + "' data-index='" + pg.ImageData[x].GraphicId + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+                $('#editorpage').append("<div class='photoclass' data-photo-id='" + pg.ImageData[x].Id + "' data-image-index='" + x + "' data-index='" + pg.ImageData[x].GraphicId + "' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
             }
         }
     },
         
-    GetScaledUnits: function(iData) {
+    LoadPage: function(isInitial) {
+        var pgTo = -1;
+        var pgnum = parseInt(global.activePage);
+        if (isInitial) {
+            editor.PutPage('.front', 1);
+        }
+
+        switch (pos) {
+            case 'next':
+                pgTo = pgnum >= album[0].PageCount ? pgnum : pgnum + 1;
+                break;
+        }
+    },
+    
+    PutPage: function(el, pgNum) {
+        var pg = pages.pgData[pgNum - 1];
+        for (var x = 0; x < pg.ImageData.length; x++) {
+            var units = editor.GetScaledUnits(pg.ImageData[x]);
+            $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+        }
+    },
+    
+    GetScaledUnits: function (iData) {
         var units = { l: null, t: null, w: null, h: null };
         var ed = $('#editorpage');
         var scale = ed.height() / 750 * 100;
@@ -263,6 +296,7 @@ var editor = {
         units.t = (Math.ceil((iData.OTop * scale) / 100)) + 'px';
         return units;
     },
+    
     Edit: function(G) {
         editor.isEditing = false;
         $('#eddy').removeAttr('id');
@@ -333,7 +367,7 @@ var editor = {
     },
     RemoveImage: function() {
         $.ajax({
-            url: $.cookie('location') + 'Data/DeletePhoto?Id=' + $('#eddy').attr('data-index'),
+            url: $.cookie('location') + 'Data/DeletePhoto?Id=' + $('#eddy').attr('data-photo-id'),
             type:'get',
             async:false,
             error:function() {
