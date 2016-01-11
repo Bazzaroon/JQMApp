@@ -231,13 +231,11 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <None Include="Properties\PublishProfiles\JQMApp.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
-    <Content Include="Images\boodamo.jpg" />
     <Content Include="Images\cover.png" />
     <Content Include="Images\homepage.jpg" />
-    <Content Include="Images\IMG_1012.JPG" />
     <Content Include="Images\pgBg.png" />
-    <Content Include="Images\them2.jpg" />
     <Content Include="Scripts\2.3.0-crypto-sha1.js" />
     <Content Include="Scripts\jqm.js" />
     <Content Include="Scripts\jqmViewer.js" />
@@ -245,6 +243,7 @@
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-scrollto.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
     <Content Include="Scripts\jquery-ui.js" />

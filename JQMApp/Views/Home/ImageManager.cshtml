@@ -2,7 +2,7 @@
         <div data-role="header" data-theme="b">
             <h1>Image Manager</h1>
             <div class="ui-btn-left" data-role="controlgroup" data-type="horizontal">
-                <a href="javascript:FillUserList()" data-theme="b" data-role="button" data-icon="forward">Main Menu</a>
+                <a href="javascript:FillUserList()" data-theme="b" data-role="button" data-icon="forward">Menu</a>
                 <a href="javascript:pages.PreviousPage()" data-theme="b" data-icon="arrow-l" data-role="button">&nbsp;</a>
             </div>
             <div class="ui-btn-right" data-role="controlgroup" data-type="horizontal">
@@ -43,26 +43,31 @@
             <input id="uploadfilebutton" type="submit" value="Upload" data-theme="b" class="ui-btn-hidden" />
             <input id="albumid" name="albumid" type="hidden" value="1000" />
             <input id="userid" name="userid" type="hidden" value="18" />
+            <input type="hidden" id="orientation" name="orientation" value=""/>
         </div>
     </form>
 </div>
 
 <script>
-
  
-    $(document).ready(function () {
-        
-        if($.cookie('userdata') != undefined){    
+    $(document).ready(function() {
+
+        if ($.cookie('userdata') != undefined) {
             var userdata = JSON.parse($.cookie('userdata'));
             $('#albumid').val(global.AlbumId);
             $('#userid').val(userdata.Id);
         }
-        
-
+        if (jQuery.browser.mobile) {
+            $('#orientation').val('portrait');
+        }
 
     });
 
-  
+    if (jQuery.browser.mobile) {
+        $(window).on('orientationchange', function(event) {
+            $('#orientation').val(event.orientation);
+        });
+    }
 
 </script>
 

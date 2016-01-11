@@ -1,11 +1,10 @@
-﻿<div align="center">
+﻿<div align="center" id="login">
     <div data-role="header" data-theme="b" style="margin:5px 0 0 0">
         <h1>Login</h1>
     </div>
     <input type="email" name="emailaddress" id="emailaddress" data-mini="true" placeholder="Email Address" style="width:300px;margin:20px 0 0 0"/>
     <input type="password" name="userpw" id="userpw" data-mini="true" placeholder="Password" style="width:300px;margin:20px 0 0 0" />
     <input class="login" type="button" value="Login" data-theme="b" data-inline="true"/>
-    <input class="register" type="button" value="Register" data-theme="b" data-inline="true" />
 
 </div>
 
@@ -14,7 +13,7 @@
         $('#emailaddress').focus();
 
     $('.register').bind('click', function (event, ui) {
-        location.href = '#userdetails';
+        $.mobile.changePage('#register');
     });
 
     $('.login').bind('click', function(event, ui) {
@@ -33,8 +32,8 @@
             type: 'post',
             data: JSON.stringify(user),
             success: function(data) {
-                if (data == null) {
-                    location.href = '#register';
+                if (data == 'null') {
+                    $.mobile.changePage('#register', { transition: 'pop', role: 'dialog' });
                 } else {
                     var usr = JSON.parse(data); 
                     global.UserId = usr.Id;

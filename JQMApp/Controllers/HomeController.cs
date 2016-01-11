@@ -16,6 +16,7 @@ namespace JQMApp.Controllers
     {
         private int albumId;
         private int userId;
+        private string orientation;
 
 
         public ActionResult Index()
@@ -40,14 +41,14 @@ namespace JQMApp.Controllers
             
             albumId = int.Parse(Request.Form["albumid"]);
             userId = int.Parse(Request.Form["userid"]);
-
+            orientation = Request.Form["orientation"];
             var scaler = new Scaler();
 
             HttpPostedFileBase postedFile = Request.Files["uploadfile"];
 
             if (Request.Files["uploadfile"].FileName == "") Index();
 
-            byte[] buffer = scaler.ScaleImage(postedFile, 996);
+            byte[] buffer = scaler.ScaleImage(postedFile, 996, orientation);
 
             string ftpUrl = string.Concat(System.Configuration.ConfigurationManager.AppSettings["FtpUploadUrl"], Path.GetFileName(postedFile.FileName));
 
@@ -56,7 +57,7 @@ namespace JQMApp.Controllers
             request.Proxy = null;
             request.UseBinary = true;
             string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"]; 
-            if ( hostName == "192.168.0.8" || hostName == "localhost")
+            if ( hostName == "192.168.0.19" || hostName == "localhost")
             {
                 request.Credentials = new NetworkCredential("Barry Tait", "repro20");
             }
@@ -108,7 +109,7 @@ namespace JQMApp.Controllers
             request.Proxy = null;
             request.UseBinary = true;
             string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"];
-            if (hostName == "192.168.0.8" || hostName == "localhost")
+            if (hostName == "192.168.0.19" || hostName == "localhost")
             {
                 request.Credentials = new NetworkCredential("Barry Tait", "repro20");
             }

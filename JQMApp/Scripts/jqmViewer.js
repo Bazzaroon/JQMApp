@@ -5,41 +5,85 @@ var jqmView = {
     viewedPage: 'front',
     viewElement: null,
     activePage: 1,
-    pgData:[],
-    
+    pgData: [],
+    aHeight: 0,
+    aWidth: 0,
+    windowScale: 90,
+    myAlbum: null,
     Init: function() {
+
         jqmView.viewElement = $('.front');
         
-        var offset = $(document).height() > $(document).width() ? 250 : 185;
-        var aHeight = $(document).height() - offset;
-        var aWidth = parseInt((aHeight * 80) / 100);
-        $(jqmView.viewElement).css({ height: aHeight + 'px', width: aWidth + 'px' });
-        if (offset > 185) {
-            $(jqmView.viewElement).css({ margin: '10px 0 0 20px' });
+        if ($(window).width() > $(window).height()) {
+            jqmView.aHeight = $(window).height() * jqmView.windowScale / 100;
+            jqmView.aWidth = jqmView.aHeight * 80 / 100;
         } else {
-            $(jqmView.viewElement).css({ margin: '10px auto' });
+            jqmView.aWidth = $(window).width() * jqmView.windowScale / 100;
+            jqmView.aHeight = jqmView.aWidth * 120 / 100;
         }
 
+        var margin = (parseInt($(window).height() - jqmView.aHeight) / 2) - 15;
+        $('.container').css({ 'margin-top': margin });
+
+        $('.container').css({ height: jqmView.aHeight + 'px', width: jqmView.aWidth + 'px' });
+
         $(window).on('resize', function () {
-            offset = $(document).height() > $(document).width() ? 250 : 185;
-            aHeight = $(document).height() - offset;
-            aWidth = parseInt((aHeight * 80) / 100);
-            $(jqmView.viewElement).css({ height: aHeight + 'px', width: aWidth + 'px' });
-            if (offset > 185) {
-                $(jqmView.viewElement).css({ margin: '10px 0 0 20px' });
+
+            if ($(window).width() > $(window).height()) {
+                jqmView.aHeight = $(window).height() * jqmView.windowScale / 100;
+                jqmView.aWidth = jqmView.aHeight * 80 / 100;
             } else {
-                $(jqmView.viewElement).css({ margin: '10px auto' });
+                jqmView.aWidth = $(window).width() * jqmView.windowScale / 100;
+                jqmView.aHeight = jqmView.aWidth * 120 / 100;
+            }
+
+            margin = parseInt($(window).height() - jqmView.aHeight) / 2;
+            $('.container').css({ 'margin-top': margin });
+
+            $('.container').css({ height: jqmView.aHeight + 'px', width: jqmView.aWidth + 'px' });
+
+            jqmView.PutPage(jqmView.viewElement, 1);
+        });
+
+        $('.container').on('swiperight', function() {
+            alert('swiped in an upward direction');
+        });
+
+        $('body').on('keydown', function(event) {
+            switch(event.which) {
+                case 39: //right arrow
+                    jqmView.NextViewPage();
+                    break;
+                case 37: //left arrow
+                    jqmView.PreviousViewPage();
+                    break;
             }
         });
-        jqmView.LoadAllPages();
-        jqmView.LoadPage(true);
+
+        jqmView.LoadAllViewPages();
 
     },
     
+    SetPageSize: function() {
+        if ($(window).width() > $(window).height()) {
+            jqmView.aHeight = $(window).height() * jqmView.windowScale / 100;
+            jqmView.aWidth = jqmView.aHeight * 80 / 100;
+        } else {
+            jqmView.aWidth = $(window).width() * jqmView.windowScale / 100;
+            jqmView.aHeight = jqmView.aWidth * 120 / 100;
+        }
+
+        var margin = (parseInt($(window).height() - jqmView.aHeight) / 2) - 15;
+        $('.container').css({ 'margin-top': margin });
+
+        $('.container').css({ height: jqmView.aHeight + 'px', width: jqmView.aWidth + 'px' });
+    },
+    
     LoadAllPages: function() {
-        var myAlbum = JSON.parse($.cookie('album'));
-        for (var x = 0; x < myAlbum[0].PageCount; x++) {
-            var photos = jqmView.GetPhotos(myAlbum[0].Id, (x + 1));
+        jqmView.myAlbum = JSON.parse($.cookie('album'));
+        $('#viewpage div h1').text(jqmView.myAlbum[0].Name);
+        for (var x = 0; x < jqmView.myAlbum[0].PageCount; x++) {
+            var photos = jqmView.GetPhotos(jqmView.myAlbum[0].Id, (x + 1));
             var pics = new Array();
             var NP = new pageData();
             for (var y = 0; y < photos.length; y++) {
@@ -56,40 +100,46 @@ var jqmView = {
     },
 
 
-    LoadPage: function (isInitial) {
-        var pgTo = -1;
-        var pgnum = parseInt(jqmView.activePage);
-        if (isInitial) {
-            jqmView.PutPage(jqmView.viewElement, 1);
-        }
+    LoadAllViewPages: function (isInitial) {
+        $('#pagecontainer').css({ height: ($(window).height() - $('#viewpage div:eq(0)').height() - 5) + 'px' });
+        jqmView.myAlbum = JSON.parse($.cookie('album'));
+        var mkUp = "<div id='outer' align='center' style='display:inline-block;width:" + $(window).width() + ";height:" + $(window).height() + "'><div class='container'></div></div>";
 
-        switch (pos) {
-            case 'next':
-                pgTo = pgnum >= album[0].PageCount ? pgnum : pgnum + 1;
-                jqmView.viewElement = jqmView.viewElement == $('.front') ? $('.back') : $('.front');
-                jqmView.PutPage(jqmView.viewElement, pgTo);
-                jqmView.activePage = pgTo;
-                break;
+        for (var x = 0; x < jqmView.myAlbum[0].PageCount; x++) {
+            $('#outer').css({ width: $(window).width() + 'px', height: $(window).height() + 'px' });
+            $('#scroller').append(mkUp);
         }
+        jqmView.SetPageSize();
+
+        var scrollerWidth = $(window).width() * parseInt(jqmView.myAlbum[0].PageCount);
+        $('#scroller').css({ width: scrollerWidth + 'px', position: 'absolute' });
     },
 
     PutPage: function (el, pgNum) {
         var pg = jqmView.pgData[pgNum - 1];
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = jqmView.GetScaledUnits(pg.ImageData[x]);
-            $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+            $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
         }
     },
     
     GetScaledUnits: function (iData) {
         var units = { l: null, t: null, w: null, h: null };
-        var ed = $(jqmView.viewElement);
+        var ed = $('#pagecontainer');
         var scale = ed.height() / 750 * 100;
         units.w = Math.ceil((iData.Width * scale) / 100).toString();
         units.l = (Math.ceil((iData.OLeft * scale) / 100)) + 'px';
         units.t = (Math.ceil((iData.OTop * scale) / 100)) + 'px';
         return units;
     },
+    
+    NextViewPage: function() {
+        $('#scroller').animate({ left: '-=' + $(window).width().toString() }, 500);
+    },
+    PreviousViewPage: function() {
+        $('#scroller').animate({ left: '+=' + $(window).width().toString() }, 500);
+    }
+    
 
 };
 

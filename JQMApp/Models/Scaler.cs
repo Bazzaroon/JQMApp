@@ -40,11 +40,19 @@ namespace JQMApp.Models
             }
             return num2;
         }
-        public byte[] ScaleImage(HttpPostedFileBase postedFile, int width)
+        public byte[] ScaleImage(HttpPostedFileBase postedFile, int width, string orientation)
         {
+            int height = 0;
             byte[] data;
             Image image = Image.FromStream(postedFile.InputStream);
-            int height = this.GetHeight(image.Width, image.Height, width);
+
+            if (orientation == "portrait")
+            {
+                image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            }
+
+            height = this.GetHeight(image.Width, image.Height, width);
+
             Bitmap bitmap = new Bitmap(width, height);
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {

@@ -77,9 +77,10 @@ var pages = {
         
     },
     Add: function (albumId) {
+        pages.pgData.length = 0;
         var myAlbum = JSON.parse($.cookie('album'));
         for (var x = 0; x < myAlbum[0].PageCount; x++) {
-            var photos = pages.GetPhotos(albumId, (x+1));
+            var photos = pages.GetPhotos(myAlbum[0].Id, (x+1));
             var pics = new Array();
             var NP = new pageData();
             for (var y = 0; y < photos.length; y++) {
@@ -112,6 +113,7 @@ var pages = {
     },
     NextPage: function () {
         var cPage = parseInt(global.activePage) + 1;
+        if (cPage > global.Album[0].PageCount) return;
         global.activePage = cPage;
         editor.ShowPage();
     },
@@ -120,6 +122,9 @@ var pages = {
         if (aPage < 1) return;
         global.activePage = aPage;
         editor.ShowPage();
+    },
+    AddANewPage: function() {
+        
     }
 
 };

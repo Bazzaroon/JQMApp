@@ -5,10 +5,14 @@
     Layout = "~/Views/Shared/_AlbumLayout.cshtml";
 }
 
-<div id="container" class="container" align="center">
-    <div id="cover">
-        <figure class="front"></figure>
-        <figure class="back"></figure>
+<div id="viewpage" data-role="page">
+    <div data-role="header" data-theme="b">
+        <h1></h1>
+        <a href="/JQMApp/Home" rel="external" data-theme="b" data-icon="back">Back</a>
+    </div>
+
+    <div id="pagecontainer" align="center">
+        <div id="scroller"></div>
     </div>
 </div>
 

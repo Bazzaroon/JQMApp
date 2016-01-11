@@ -1,0 +1,59 @@
+﻿@{
+    @model IEnumerable<JQMApp.App.Models.GraphicItem>
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Slide Show</title>
+        <link href="~/Content/JQ-UI/jquery-ui.css" rel="stylesheet" />
+        <link href="~/Content/pgwslideshow.css" rel="stylesheet" />
+        <link href="~/Content/jqm.css" rel="stylesheet" />
+
+        <script src="~/Scripts/jquery-1.8.2.js"></script>
+        <script src="~/Scripts/jquery-ui.js"></script>
+        <script src="~/Scripts/pgwslideshow.min.js"></script>
+        <script src="~/Scripts/jquery.cookie.js"></script>
+
+    </head>
+    <body style="margin:0">
+        <div>
+            <div onclick="GoToMenu()" class="mainmenubutton">Home Page</div>
+            <div class="showContainer">
+                <ul style="padding:0 !important; background-color:white !important" class="pgwSlideshow">
+                    @foreach (var slide in Model)
+                    {
+                        <li><img src="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/@slide.Url"></img></li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        ResizeWidth();
+        var pgShow = $('.pgwSlideshow').pgwSlideshow({
+            autoSlide: true,
+            displayControls:false
+        });
+    });
+
+    $(window).on('resize', function() {
+        ResizeWidth();
+    });
+    
+    function GoToMenu() {
+        location.href = $.cookie('location');
+    }
+    
+    function ResizeWidth() {
+        var SW = $(window).width() > 966 ? 966 : ($(window).width() - 50);
+        $('.showContainer').css({ width: SW + 'px' });
+    }
+    
+</script>

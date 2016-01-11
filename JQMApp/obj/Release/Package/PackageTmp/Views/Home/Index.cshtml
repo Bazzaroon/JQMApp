@@ -1,0 +1,175 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>JQM</title>
+
+    <link href="~/Content/jquery.mobile.theme-1.1.2.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.mobile-1.1.2.min.css" rel="stylesheet" />
+    <link href="~/Content/jquery.mThumbnailScroller.css" rel="stylesheet" />
+    <link href="~/Content/pgwslideshow.css" rel="stylesheet" />
+
+    <script src="~/Scripts/jquery-1.8.2.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <script src="~/Scripts/jquery.mThumbnailScroller.js"></script>
+
+    <script src="~/Scripts/jquery.mobile-1.1.2.min.js"></script>
+    <link href="~/Content/jqm.css" rel="stylesheet" />
+    <script src="~/Scripts/jqm.js"></script>
+    <script src="~/Scripts/2.3.0-crypto-sha1.js"></script>
+    <script src="~/Scripts/pgwslideshow.min.js"></script>
+
+</head>
+
+<body>
+    <div id="home" data-role="page" data-theme="b" data-content-theme="b">
+        <div data-role="header" data-theme="b">
+            <h1></h1>
+            <a id="loginbutton" href="#login" data-icon="forward" class="ui-btn-right">&nbsp;Log In&nbsp;</a>
+            <a id="viewbutton" href="javascript:FillUserList()" data-icon="forward" class="ui-btn-left">&nbsp;View&nbsp;</a>
+            <a id="editbutton" data-position="inline" href="javascript:FillPageList()" data-icon="forward" style="display:none" class="ui-btn-right">&nbsp;Edit&nbsp;</a>
+        </div>
+    </div>
+
+    <div id="blog" data-role="page">
+        <div data-role="header">
+            <h1>Blog</h1>
+        </div>
+        <p>This is our blog.</p>
+        <a href="#home" data-transition="flip">Home</a>
+    </div>
+
+    <div id="login" data-role="page">
+        @Html.Partial("Login")
+    </div>
+    
+    <div id="userdetails" data-role="page">
+        <div data-role="header" data-theme="b">
+            <h1>User Details</h1>
+        </div>
+    </div>
+    
+    <div id="chooseview" data-role="page">
+        <div style="margin:20px auto;width:300px;">
+            <ul id="llist" data-role="listview" data-inset="true" data-theme="b">
+                
+            </ul>
+        </div>
+        <div data-role="footer" data-theme="b" data-position="fixed">
+            <a id="closebutton" href='#home' data-icon="forward">&nbsp;Close&nbsp;</a>
+        </div>
+    </div>
+    @Html.Partial("Cover")
+    @Html.Partial("Editor")
+    @Html.Partial("ImageManager")
+    
+    <div id="browser" data-role="page">
+       <h3>Please use a compatible browser. eg: Chrome</h3>
+    </div>
+</body>
+</html>
+
+<script>
+
+    $(document).ready(function () {
+
+        if ('@(Request.QueryString["mode"])' == 'mainmenu') {
+            $.mobile.changePage($.cookie('location') + '#chooseview');
+        }
+
+        global.ScreenWidth = $(window).width();
+        global.ScreenHeight = $(window).height();
+        
+        $('#viewbutton').hide();
+        var loc = 'http://' + location.host + '/JQMApp/';
+        $.cookie('location', loc, { expires: 30, path: '/' });
+
+        var query = 'Data/GetAlbumDetails?albumId=' + global.AlbumId;
+            global.Album = jax.GetData(query, ' album ');
+            $.cookie('album', JSON.stringify(global.Album), { expires: 30, path: '/' });
+            album = $.cookie('album');
+
+        if ($.cookie('userdata') != undefined) {
+            var user = JSON.parse($.cookie('userdata'));
+            $('#home div h1').text('Welcome back ' + user.UserName);
+            $('#loginbutton').hide();
+            $('#viewbutton').show();
+            if (user.Administrator && !IsMobile()) {
+                $('#editbutton').show();
+            }
+        }
+        var validNavigator = false;
+        if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('Safari') > -1 || navigator.userAgent.indexOf('Trident') > -1 || navigator.userAgent.indexOf('Firefox') > -1) validNavigator = true;
+
+        if (!validNavigator) {
+            alert('Please use a valid browser');
+            location.href = '#home';
+        }
+
+        $(window).on('orientationchange', function (event) {
+            $(window).trigger('resize');
+        });
+
+        LoadPages();
+    });
+    
+    
+    function FillUserList() {
+        var mkUp = '';
+        var uData = JSON.parse($.cookie('userdata'));
+        $.mobile.changePage('#chooseview');
+        var query = 'Data/GetUserAddresses?albumId=' + global.AlbumId;
+        $('#llist').empty();
+        $('#llist').append("<li><a  rel='external' href='" + $.cookie('location') + "WeddingAlbum'>" + global.Album[0].Name + "</a></li>");
+        $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
+        $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
+        $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
+        var data = jax.GetData(query);
+        var uData = JSON.parse($.cookie('userdata'));
+        for (var p = 0; p < data.length; p++) {
+            mkUp += "<li data-inset='true'><a role-transition='flip' rel='external' href='/JQMApp/SiteUser/Index/" + data[p].Id + "'>" + data[p].Email + "</a></li>";
+        }
+        $('#llist').append(mkUp);
+        $('#llist').listview('refresh', true);
+
+    }
+    
+    function CloseAlbumList() {
+        $.mobile.changePage('#home');
+    }
+
+    function LoadPages() {
+        var pageWidth = PageSize();
+        pages.Add(global.AlbumId);
+        for (var x = 0; x < global.Album[0].PageCount; x++) {
+            pages.AddPage(x+1);
+        }
+    }
+    function Logout() {
+        $.removeCookie('userdata', { path: '/' });
+        $('#viewbutton').hide();
+        $.mobile.changePage($.cookie('location') + '/Home', { reloadPage: true, transition: 'flip' });
+
+    }
+    
+    function IsMobile() {
+        var isMobile = false;
+        var minDim = Math.min($(window).width(), $(window).height());
+        if (minDim < 500) {
+            isMobile = true;
+        }
+        return isMobile;
+    }
+    function View() {
+        $.mobile.changePage('#imagemanager');
+        editor.isEditor = false;
+        editor.GetThumbs($('#thumbs ul'), false);
+    }
+
+
+</script>

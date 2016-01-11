@@ -1,0 +1,38 @@
+﻿@model IEnumerable<JQMApp.App.Models.Photo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AlbumLayout.cshtml";
+}
+
+<div id="pagecontainer" class="container" align="center">
+    <div id="cover">
+        <figure class="front"></figure>
+        <figure class="back"></figure>
+    </div>
+</div>
+
+<script>
+    var album = JSON.parse($.cookie('album'));
+    
+    $(document).ready(function () {
+        album = JSON.parse($.cookie('album'));
+        jqmView.Init();
+
+        $('#editorpage').click(function() {
+            $(this).addClass('flip');
+        });
+    });
+
+    function LoadPages() {
+        pages.Add(album[0].Id);
+        for (var x = 0; x < album[0].PageCount; x++) {
+            pages.AddPage(x + 1);
+        }
+
+    }
+    
+
+
+</script>
+

@@ -34,6 +34,11 @@ namespace JQMApp.App.Models
             }
         }
 
+        public void RemovePage()
+        {
+            
+        }
+
     }
 
 
