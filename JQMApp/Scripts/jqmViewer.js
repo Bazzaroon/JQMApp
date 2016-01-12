@@ -45,21 +45,32 @@ var jqmView = {
             jqmView.PutPage(jqmView.viewElement, 1);
         });
 
-        $('.container').on('swiperight', function() {
-            alert('swiped in an upward direction');
+        var tStart = 0;
+
+        $('body').on('touchstart', function(evt) {
+            evt.preventDefault();
+            tStart = evt.originalEvent.touches[0].pageX;
         });
 
-        $('body').on('keydown', function(event) {
-            switch(event.which) {
-                case 39: //right arrow
-                    jqmView.NextViewPage();
-                    break;
-                case 37: //left arrow
+        $('body').on('touchend', function (evt) {
+            evt.preventDefault();
+            if (evt.originalEvent.changedTouches[0].pageX < tStart) {
+                jqmView.NextViewPage();
+            } else {
                     jqmView.PreviousViewPage();
-                    break;
             }
         });
 
+ 
+        $(window).on('orientationchange', function (event) {
+            if (event.orientation == 'landscape') {
+                $.mobile.changePage('#landscape', {transition:'pop', role: 'dialog'});
+            } else {
+                $.mobile.changePage('#viewpage');
+            }
+        });
+
+        jqmView.LoadAllPages();
         jqmView.LoadAllViewPages();
 
     },
@@ -103,30 +114,30 @@ var jqmView = {
     LoadAllViewPages: function (isInitial) {
         $('#pagecontainer').css({ height: ($(window).height() - $('#viewpage div:eq(0)').height() - 5) + 'px' });
         jqmView.myAlbum = JSON.parse($.cookie('album'));
-        var mkUp = "<div id='outer' align='center' style='display:inline-block;width:" + $(window).width() + ";height:" + $(window).height() + "'><div class='container'></div></div>";
 
         for (var x = 0; x < jqmView.myAlbum[0].PageCount; x++) {
-            $('#outer').css({ width: $(window).width() + 'px', height: $(window).height() + 'px' });
+            var mkUp = "<div id='outer' align='center' style='display:inline-block;width:" + $(window).width() + ";height:" + $(window).height() + "'><div id='pImage" + x + "' class='container'></div></div>";
             $('#scroller').append(mkUp);
+            jqmView.PutPage($('#pImage' + x), x + 1);
         }
+
         jqmView.SetPageSize();
 
         var scrollerWidth = $(window).width() * parseInt(jqmView.myAlbum[0].PageCount);
-        $('#scroller').css({ width: scrollerWidth + 'px', position: 'absolute' });
+        $('#scroller').css({ width: scrollerWidth + 'px', position:'relative'});
     },
 
     PutPage: function (el, pgNum) {
         var pg = jqmView.pgData[pgNum - 1];
         for (var x = 0; x < pg.ImageData.length; x++) {
-            var units = jqmView.GetScaledUnits(pg.ImageData[x]);
+            var units = jqmView.GetScaledUnits(pg.ImageData[x], x);
             $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
         }
     },
     
-    GetScaledUnits: function (iData) {
+    GetScaledUnits: function (iData, dex) {
         var units = { l: null, t: null, w: null, h: null };
-        var ed = $('#pagecontainer');
-        var scale = ed.height() / 750 * 100;
+        var scale = jqmView.aHeight / 750 * 100;
         units.w = Math.ceil((iData.Width * scale) / 100).toString();
         units.l = (Math.ceil((iData.OLeft * scale) / 100)) + 'px';
         units.t = (Math.ceil((iData.OTop * scale) / 100)) + 'px';
@@ -134,13 +145,17 @@ var jqmView = {
     },
     
     NextViewPage: function() {
-        $('#scroller').animate({ left: '-=' + $(window).width().toString() }, 500);
+        if (jqmView.activePage > 0 && jqmView.activePage < jqmView.myAlbum[0].PageCount) {
+            $('#scroller').animate({ left: '-=' + $(window).width().toString() }, 400);
+            jqmView.activePage++;
+        }
     },
     PreviousViewPage: function() {
-        $('#scroller').animate({ left: '+=' + $(window).width().toString() }, 500);
+        if (jqmView.activePage > 1 && jqmView.activePage <= jqmView.myAlbum[0].PageCount) {
+            $('#scroller').animate({ left: '+=' + $(window).width().toString() }, 400);
+            jqmView.activePage--;
+        }
     }
-    
-
 };
 
 var jax = {
