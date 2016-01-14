@@ -70,6 +70,17 @@ var jqmView = {
             }
         });
 
+        $(document).on('keydown', function(event) {
+            switch(event.which) {
+                case 39:
+                    jqmView.NextViewPage();
+                    break;
+                case 37:
+                    jqmView.PreviousViewPage();
+                    break;
+            }
+        });
+
         jqmView.LoadAllPages();
         jqmView.LoadAllViewPages();
 

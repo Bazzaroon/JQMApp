@@ -6,14 +6,15 @@
 }
 
 <div id="viewpage" data-role="page">
-    <div data-role="header" data-theme="b">
+    <div data-role="header" data-theme="b" data-position="fixed">
         <h1></h1>
-        <a href="/JQMApp/Home" rel="external" data-theme="b" data-icon="back">Back</a>
+        <a href="/JQMApp" rel="external" data-theme="b" data-icon="forward">Back</a>
     </div>
 
     <div id="pagecontainer" align="center">
         <div id="scroller"></div>
     </div>
+    <input type="button" data-theme="b" value="Home" onclick="GoHome()"/>
 </div>
 <div id="landscape" data-role="page" data-overlay-theme="f" style="text-align:center">
     <div role="heading" data-role="header" data-theme="b">
@@ -41,6 +42,10 @@
             pages.AddPage(x + 1);
         }
 
+    }
+    
+    function GoHome() {
+        location.href = "/JQMApp/Home/Index";
     }
     
 

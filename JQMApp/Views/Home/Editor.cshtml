@@ -39,9 +39,9 @@
         editor.GetThumbs($('#thumbs ul'), false, false);
     }
     function AddAPage() {
-
+        var album = JSON.parse($.cookie('album'));
         $.ajax({
-            url: $.cookie('location') + 'Data/AddPage?albumId=' + global.Album[0].Id,
+            url: $.cookie('location') + 'Data/AddPage?albumId=' + album[0].Id,
             type: 'get',
             async: false,
             success: function() {

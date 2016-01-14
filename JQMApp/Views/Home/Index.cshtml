@@ -70,7 +70,17 @@
             <h1>Registration</h1>
 
         </div>
-        <h3>Please enter your registration details</h3>
+        <h3 style="margin-top:10px">Please enter your registration details</h3>
+        <label style="margin:20px 0 0 0" for="usernme">UserName</label>
+        <input style="width:80%;margin:0 auto 10px auto" type="text" id="usernme"/>
+
+        <label style="margin:20px 0 0 0" for="emailaddr">Email Address</label>
+        <input style="width:80%;margin:0 auto 10px auto" type="text" id="emailaddr" />
+
+        <label id="pwd" style="margin:20px 0 0 0" for="passwd">Password</label>
+        <input style="width:80%;margin:0 auto 10px auto" type="password" id="passwd" />
+        
+        <a href="javascript:RegisterUser()" data-role="button" data-icon="back"  data-theme="b" data-inline="true">Submit</a>
 
     </div>
     @Html.Partial("Cover")
@@ -88,7 +98,8 @@
     $(document).ready(function () {
 
         if ('@(Request.QueryString["mode"])' == 'mainmenu') {
-            $.mobile.changePage($.cookie('location') + '#chooseview');
+            FillUserList();
+            //$.mobile.changePage($.cookie('location') + '#chooseview');
         }
 
         global.ScreenWidth = $(window).width();
@@ -105,7 +116,7 @@
 
         if ($.cookie('userdata') != undefined) {
             var user = JSON.parse($.cookie('userdata'));
-            $('#home div h1').text('Welcome back ' + user.UserName);
+            $('#home div h1').text(user.UserName);
             $('#loginbutton').hide();
             $('#viewbutton').show();
             if (user.Administrator && !IsMobile()) {
@@ -123,6 +134,26 @@
         $(window).on('orientationchange', function (event) {
             $(window).trigger('resize');
         });
+
+        $('#usernme').on('keydown', function() {
+            if ($(this).css('color') == "rgb(255, 0, 0)") {
+                $(this).val('');
+            }
+                $(this).css({ color: 'Black' });
+        });
+        $('#emailaddr').on('keydown', function () {
+            if ($(this).css('color') == "rgb(255, 0, 0)") {
+                $(this).val('');
+            }
+            $(this).css({ color: 'Black' });
+        });
+        $('#passwd').on('keydown', function () {
+            if ($(this).val().length == 0) {
+                $('#pwd').text('Password');
+            }
+            $('#pwd').css({ color: 'Black' });
+        });
+
 
         LoadPages();
     });
@@ -180,5 +211,45 @@
         editor.GetThumbs($('#thumbs ul'), false);
     }
 
+    function RegisterUser() {
+        if ($('#emailaddr').val() == '' ) {
+            $('#emailaddr').css({ color: 'red' });
+            $('#emailaddr').val('Please enter a valid email address');
+            return;
+        }
+        if ($('#usernme').val() == '') {
+            $('#usernme').css({ color: 'red' });
+            $('#usernme').val('Please enter a valid user name');
+            return;
+        }
+        if ($('#passwd').val() == '') {
+            $('#pwd').css({ color: 'red' });
+            $('#pwd').text('Please enter a password');
+            return;
+        }
+
+        var usr = new Users();
+        usr.UserName = $('#usernme').val();
+        usr.Email = $('#emailaddr').val();
+        usr.PasswordHash = Crypto.SHA1($('#passwd').val());
+        usr.Active = true;
+        usr.Administrator = false;
+        usr.AlbumId = global.Album[0].Id;
+
+        $.ajax({
+            url: $.cookie('location') + 'Data/RegisterUser',
+            type: 'post',
+            data: JSON.stringify(usr),
+            async: false,
+            error: function() {
+                MsgBox('Error', 'Unable to register user');
+            },
+            success: function() {
+                $('#emailaddress').val($('#emailaddr').val());
+                $('#userpw').val($('#passwd').val());
+                $.mobile.changePage('#login');
+            }
+        });
+    }
 
 </script>

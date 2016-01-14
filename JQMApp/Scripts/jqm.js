@@ -242,7 +242,7 @@ var editor = {
     OpenImageEditor: function(G, fromScroller) {
         if (editor.isEditing) return;
         var url = G.src.replace('_t', '');
-        $('#editorpage').append("<div id='eddy'><img width='200' id='" + G.id + "' src='" + url + "'></div>");
+        $('#editorpage').append("<div id='eddy' data-index='0'><img width='200' id='" + G.id + "' src='" + url + "'></div>");
         editor.isEditing = true;
         $('#epanel').show();
         if (fromScroller) {
@@ -311,18 +311,19 @@ var editor = {
         editor.isEditing = true;
     },
     Cancel: function() {
-        if ($('#eddy').attr('data-index') != 0) {
+        if ($('#eddy').attr('data-index') != '0') {
             if (confirm('Remove this image?')) {
                 editor.RemoveImage();
                 return;
             }
         }
 
-        if ($('#eddy').attr('data-index') == 0) {
+        if ($('#eddy').attr('data-index') == '0') {
             $('#eddy').remove();
         } else {
             $('#eddy img').css({ border: 'none' });
         }
+        editor.isEditing = false;
     },
     Save: function() {
         if (!confirm('Update image?')) return;
@@ -388,3 +389,18 @@ var editor = {
 
 
 };
+
+function MsgBox(title, msg) {
+    var mkUp = "<div class='msgbox'>";
+    mkUp += "<div class='title'>" + title + "</div>";
+    mkUp += "<div class='errmsg'>" + msg + "</div>";
+    mkUp += "</div>";
+    $('body').append(mkUp);
+    $('.msgbox').css({ top: '150px', left: (($(window).width() / 2) - 125) + 'px' });
+
+    setTimeout(function() {
+        $('.msgbox').fadeOut(1000, function() {
+            $(this).remove();
+        });
+    }, 1500);
+}

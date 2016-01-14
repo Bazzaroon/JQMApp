@@ -248,3 +248,29 @@
     left: 0;
     top: 0;
 }
+.msgbox {
+    width: 250px;
+    position: absolute;
+    border: 1px solid #404040;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    min-height: 100px;
+    font-family: Arial;
+    background-color: white;
+    font-weight: bold;
+}
+.title {
+    text-align: center;
+    line-height: 28px;
+    height: 32px;
+    background: linear-gradient(#6da9d3, #4a7caf);
+    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: white;
+}
+.errmsg {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0 10px 0;
+}
