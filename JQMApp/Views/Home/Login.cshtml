@@ -41,9 +41,9 @@
                     var usr = JSON.parse(data); 
                     global.UserId = usr.Id;
                     $('#home div h1').text('Welcome ' + usr.UserName);
-                    $('#home div a').remove();
+                    $('#loginbutton').remove();
                     $.cookie('userdata', data, { expires: 30, path: '/' });
-                    location.href = $.cookie('location') + 'home';
+                    location.href = $.cookie('location') + 'Home';
                 }
             },
             error: function(a, b, c) {
