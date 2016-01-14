@@ -57,8 +57,11 @@
     <div id="chooseview" data-role="page">
         <div style="margin:20px auto;width:300px;">
             <ul id="llist" data-role="listview" data-inset="true" data-theme="b">
-                
             </ul>
+            <div data-role="collapsible" data-content-theme="b" data-theme="b">Users
+                <h3>User Images</h3>
+                <ul data-filter="true" id="emaillist" data-role="listview" data-inset="true" data-theme="b" style="margin:10px 0 0 0"></ul>
+            </div>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed">
             <a id="closebutton" href='#home' data-icon="forward">&nbsp;Close&nbsp;</a>
@@ -169,13 +172,15 @@
         $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
+        $('#llist').listview('refresh', true);
+
         var data = jax.GetData(query);
-        var uData = JSON.parse($.cookie('userdata'));
+
         for (var p = 0; p < data.length; p++) {
             mkUp += "<li data-inset='true'><a role-transition='flip' rel='external' href='/JQMApp/SiteUser/Index/" + data[p].Id + "'>" + data[p].Email + "</a></li>";
         }
-        $('#llist').append(mkUp);
-        $('#llist').listview('refresh', true);
+        $('#emaillist').append(mkUp);
+        $('#emaillist').listview('refresh', true);
 
     }
     
