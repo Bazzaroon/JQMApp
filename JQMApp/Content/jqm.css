@@ -274,3 +274,6 @@
     text-align: center;
     margin: 10px 0 10px 0;
 }
+.msgbox {
+    z-index: 100;
+}

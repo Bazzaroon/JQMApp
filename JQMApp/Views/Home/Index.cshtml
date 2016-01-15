@@ -97,7 +97,7 @@
 </html>
 
 <script>
-
+    
     $(document).ready(function () {
 
         if ('@(Request.QueryString["mode"])' == 'mainmenu') {
@@ -125,7 +125,10 @@
             if (user.Administrator && !IsMobile()) {
                 $('#editbutton').show();
             }
+        } else {
+            $('#viewbutton').hide();
         }
+        
         var validNavigator = false;
         if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('Safari') > -1 || navigator.userAgent.indexOf('Trident') > -1 || navigator.userAgent.indexOf('Firefox') > -1) validNavigator = true;
 
@@ -196,10 +199,9 @@
         }
     }
     function Logout() {
-        $.removeCookie('userdata', { path: '/' });
         $('#viewbutton').hide();
-        $.mobile.changePage($.cookie('location') + '/Home', { reloadPage: true, transition: 'flip' });
-
+        $.removeCookie('userdata', { path: '/' });
+        $.mobile.changePage($.cookie('location') + 'Home', { reloadPage: true, transition: 'flip' });
     }
     
     function IsMobile() {
