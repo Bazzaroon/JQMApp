@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
+using WebGrease.Activities;
 
 namespace JQMApp.Models
 {
@@ -35,7 +37,9 @@ namespace JQMApp.Models
             var cmd = new SqlCommand();
             string query = "insert into users (UserName, Email, PasswordHash, AlbumId) values (@username, @mailaddress, @pw, @albumid)";
             cmd.CommandText = query;
-
+            
+            Logging.log(query);
+            
             cmd.Parameters.Add(new SqlParameter("@username", user.UserName));
             cmd.Parameters.Add(new SqlParameter("@mailaddress", user.Email));
             cmd.Parameters.Add(new SqlParameter("@pw", user.PasswordHash));
@@ -51,6 +55,7 @@ namespace JQMApp.Models
             }
             catch (SqlException sqlException)
             {
+                Logging.log(sqlException.Message);
                 cmd.Connection.Close();
             }
 

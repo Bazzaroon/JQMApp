@@ -46,6 +46,7 @@ namespace JQMApp.Controllers
 
             HttpPostedFileBase postedFile = Request.Files["uploadfile"];
 
+
             if (Request.Files["uploadfile"].FileName == "") Index();
 
             byte[] buffer = scaler.ScaleImage(postedFile, 996, orientation);

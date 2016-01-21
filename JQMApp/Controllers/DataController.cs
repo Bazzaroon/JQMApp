@@ -59,6 +59,7 @@ namespace JQMApp.Controllers
         [HttpGet]
         public void AddPage(int albumId)
         {
+            Logging.log("Added a page to album " + albumId.ToString());
             var album = new Album();
             album.AddPage(albumId);
         }
@@ -105,8 +106,10 @@ namespace JQMApp.Controllers
             {
                 data = reader.ReadToEnd();
             }
+            Logging.log(data);
             var user = JsonConvert.DeserializeObject<Users>(data);
 
+            
             user.RegisterUser(user);
 
         }
