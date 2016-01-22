@@ -18,7 +18,7 @@
         <input type="range" name="pages-slider" id="pages-slider" value="1" min="1" />
 
         <input type="button" id="gotopage" data-inline="true" data-theme="b" value="Goto Page" data-icon="plus" onclick="GotoPage()" />
-        <input type="button" id="addpage" data-inline="true" data-theme="b" value="Add Page" data-icon="plus"/>
+        <input type="button" id="addpage" data-inline="true" data-theme="b" value="Add Page" data-icon="plus" onclick="AddAPage()"/>
         <input type="button" id="removepage" data-inline="true" data-theme="b" value="Remove Page" data-icon="plus" />
     </div>
 
@@ -37,6 +37,27 @@
         editor.ShowPage();
         editor.isEditor = true;
         editor.GetThumbs($('#thumbs ul'), false, false);
+    }
+    function AddAPage() {
+        var album = JSON.parse($.cookie('album'));
+        $.ajax({
+            url: $.cookie('location') + 'Data/AddPage?albumId=' + album[0].Id,
+            type: 'get',
+            async: false,
+            success: function() {
+                var album = JSON.parse($.cookie('album'));
+                var pgCount = parseInt(album[0].PageCount);
+                pgCount++;
+                album[0].PageCount = pgCount;
+                $.cookie('album', JSON.stringify(album), { expires: 30, path: '/' });
+                global.Album[0].PageCount++;
+                $('#pages-slider').attr('max', global.Album[0].PageCount);
+
+                $('#pages-slider').val(parseInt(global.Album[0].PageCount));
+                pages.Add();
+                GotoPage();
+            }
+        });
     }
     
 </script>

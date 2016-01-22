@@ -5,13 +5,25 @@
     Layout = "~/Views/Shared/_AlbumLayout.cshtml";
 }
 
-<div id="pagecontainer" class="container" align="center">
-    <div id="cover">
-        <figure class="front"></figure>
-        <figure class="back"></figure>
+<div id="viewpage" data-role="page">
+    <div data-role="header" data-theme="b" data-position="fixed">
+        <h1></h1>
+        <a href="/JQMApp" rel="external" data-theme="b" data-icon="forward">Back</a>
     </div>
-</div>
 
+    <div id="pagecontainer" align="center">
+        <div id="scroller"></div>
+    </div>
+    <input type="button" data-theme="b" value="Home" onclick="GoHome()"/>
+</div>
+<div id="landscape" data-role="page" data-overlay-theme="f" style="text-align:center">
+    <div role="heading" data-role="header" data-theme="b">
+        <h1>Orientation Error</h1>
+    </div>
+    <h3 style='margin:20px 0 20px 0'>This page can not be viewed in landscape mode</h3>
+    <div>Please return your handset to portrait mode.<br/><br/></div>
+
+</div>
 <script>
     var album = JSON.parse($.cookie('album'));
     
@@ -30,6 +42,10 @@
             pages.AddPage(x + 1);
         }
 
+    }
+    
+    function GoHome() {
+        location.href = "/JQMApp/Home/Index";
     }
     
 

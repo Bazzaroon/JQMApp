@@ -57,12 +57,34 @@
     <div id="chooseview" data-role="page">
         <div style="margin:20px auto;width:300px;">
             <ul id="llist" data-role="listview" data-inset="true" data-theme="b">
-                
             </ul>
+            <div data-role="collapsible" data-content-theme="b" data-theme="b">Users
+                <h3>User Images</h3>
+                <ul data-filter="true" id="emaillist" data-role="listview" data-inset="true" data-theme="b" style="margin:10px 0 0 0"></ul>
+            </div>
         </div>
         <div data-role="footer" data-theme="b" data-position="fixed">
             <a id="closebutton" href='#home' data-icon="forward">&nbsp;Close&nbsp;</a>
         </div>
+    </div>
+    
+    <div id="register" data-role="page" data-overlay-theme="f" style="text-align:center">
+        <div data-role="header" data-theme="b">
+            <h1>Registration</h1>
+
+        </div>
+        <h3 style="margin-top:10px">Please enter your registration details</h3>
+        <label style="margin:20px 0 0 0" for="usernme">UserName</label>
+        <input style="width:80%;margin:0 auto 10px auto" type="text" id="usernme"/>
+
+        <label style="margin:20px 0 0 0" for="emailaddr">Email Address</label>
+        <input style="width:80%;margin:0 auto 10px auto" type="text" id="emailaddr" />
+
+        <label id="pwd" style="margin:20px 0 0 0" for="passwd">Password</label>
+        <input style="width:80%;margin:0 auto 10px auto" type="password" id="passwd" />
+        
+        <a href="javascript:RegisterUser()" data-role="button" data-icon="back"  data-theme="b" data-inline="true">Submit</a>
+
     </div>
     @Html.Partial("Cover")
     @Html.Partial("Editor")
@@ -75,11 +97,12 @@
 </html>
 
 <script>
-
+    
     $(document).ready(function () {
 
         if ('@(Request.QueryString["mode"])' == 'mainmenu') {
-            $.mobile.changePage($.cookie('location') + '#chooseview');
+            FillUserList();
+            //$.mobile.changePage($.cookie('location') + '#chooseview');
         }
 
         global.ScreenWidth = $(window).width();
@@ -96,13 +119,16 @@
 
         if ($.cookie('userdata') != undefined) {
             var user = JSON.parse($.cookie('userdata'));
-            $('#home div h1').text('Welcome back ' + user.UserName);
+            $('#home div h1').text(user.UserName);
             $('#loginbutton').hide();
             $('#viewbutton').show();
             if (user.Administrator && !IsMobile()) {
                 $('#editbutton').show();
             }
+        } else {
+            $('#viewbutton').hide();
         }
+        
         var validNavigator = false;
         if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('Safari') > -1 || navigator.userAgent.indexOf('Trident') > -1 || navigator.userAgent.indexOf('Firefox') > -1) validNavigator = true;
 
@@ -114,6 +140,26 @@
         $(window).on('orientationchange', function (event) {
             $(window).trigger('resize');
         });
+
+        $('#usernme').on('keydown', function() {
+            if ($(this).css('color') == "rgb(255, 0, 0)") {
+                $(this).val('');
+            }
+                $(this).css({ color: 'Black' });
+        });
+        $('#emailaddr').on('keydown', function () {
+            if ($(this).css('color') == "rgb(255, 0, 0)") {
+                $(this).val('');
+            }
+            $(this).css({ color: 'Black' });
+        });
+        $('#passwd').on('keydown', function () {
+            if ($(this).val().length == 0) {
+                $('#pwd').text('Password');
+            }
+            $('#pwd').css({ color: 'Black' });
+        });
+
 
         LoadPages();
     });
@@ -129,13 +175,15 @@
         $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
+        $('#llist').listview('refresh', true);
+
         var data = jax.GetData(query);
-        var uData = JSON.parse($.cookie('userdata'));
+
         for (var p = 0; p < data.length; p++) {
             mkUp += "<li data-inset='true'><a role-transition='flip' rel='external' href='/JQMApp/SiteUser/Index/" + data[p].Id + "'>" + data[p].Email + "</a></li>";
         }
-        $('#llist').append(mkUp);
-        $('#llist').listview('refresh', true);
+        $('#emaillist').append(mkUp);
+        $('#emaillist').listview('refresh', true);
 
     }
     
@@ -151,10 +199,9 @@
         }
     }
     function Logout() {
-        $.removeCookie('userdata', { path: '/' });
         $('#viewbutton').hide();
-        $.mobile.changePage($.cookie('location') + '/Home', { reloadPage: true, transition: 'flip' });
-
+        $.removeCookie('userdata', { path: '/' });
+        $.mobile.changePage($.cookie('location') + 'Home', { reloadPage: true, transition: 'flip' });
     }
     
     function IsMobile() {
@@ -171,5 +218,45 @@
         editor.GetThumbs($('#thumbs ul'), false);
     }
 
+    function RegisterUser() {
+        if ($('#emailaddr').val() == '' ) {
+            $('#emailaddr').css({ color: 'red' });
+            $('#emailaddr').val('Please enter a valid email address');
+            return;
+        }
+        if ($('#usernme').val() == '') {
+            $('#usernme').css({ color: 'red' });
+            $('#usernme').val('Please enter a valid user name');
+            return;
+        }
+        if ($('#passwd').val() == '') {
+            $('#pwd').css({ color: 'red' });
+            $('#pwd').text('Please enter a password');
+            return;
+        }
+
+        var usr = new Users();
+        usr.UserName = $('#usernme').val();
+        usr.Email = $('#emailaddr').val();
+        usr.PasswordHash = Crypto.SHA1($('#passwd').val());
+        usr.Active = true;
+        usr.Administrator = false;
+        usr.AlbumId = global.Album[0].Id;
+
+        $.ajax({
+            url: $.cookie('location') + 'Data/RegisterUser',
+            type: 'post',
+            data: JSON.stringify(usr),
+            async: false,
+            error: function() {
+                MsgBox('Error', 'Unable to register user');
+            },
+            success: function() {
+                $('#emailaddress').val($('#emailaddr').val());
+                $('#userpw').val($('#passwd').val());
+                $.mobile.changePage('#login');
+            }
+        });
+    }
 
 </script>

@@ -1,4 +1,4 @@
-﻿<div align="center">
+﻿<div align="center" id="login">
     <div data-role="header" data-theme="b" style="margin:5px 0 0 0">
         <h1>Login</h1>
     </div>
@@ -14,13 +14,17 @@
         $('#emailaddress').focus();
 
     $('.register').bind('click', function (event, ui) {
-        location.href = '#userdetails';
+        $.mobile.changePage('#register');
     });
 
     $('.login').bind('click', function(event, ui) {
         LoginUser();
     });
     
+    $('.register').bind('click', function (event, ui) {
+        $.mobile.changePage('#register', { transition: 'pop', role: 'dialog' });
+    });
+
     function LoginUser() {
         var user = new Users();
         var URL = $.cookie('location') + 'Data/UserLogIn';
@@ -33,15 +37,18 @@
             type: 'post',
             data: JSON.stringify(user),
             success: function(data) {
-                if (data == null) {
-                    location.href = '#register';
+                if (data == 'null') {
+                    MsgBox('Error', 'Unable to find user');
+                    $('#emailaddr').val($('#emailaddress').val());
+                    $('#passwd').val($('#userpw').val());
+                    $.mobile.changePage('#register', { transition: 'pop', role: 'dialog' });
                 } else {
                     var usr = JSON.parse(data); 
                     global.UserId = usr.Id;
                     $('#home div h1').text('Welcome ' + usr.UserName);
-                    $('#home div a').remove();
+                    $('#loginbutton').remove();
                     $.cookie('userdata', data, { expires: 30, path: '/' });
-                    location.href = $.cookie('location') + 'home';
+                    location.href = $.cookie('location') + 'Home';
                 }
             },
             error: function(a, b, c) {

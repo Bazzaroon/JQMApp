@@ -23,13 +23,7 @@
   -o-background-size: cover;
   background-size: cover;
 }
-.pagecontainer{
-    width:50%;
-    height: 50%;
-    border:1px solid #CCCCCC;
-    box-shadow: 0 0 5px #aaa;
-    margin:20px auto;
-}
+
 .thumbs {
     width: 20%;
     border: 1px solid #CCCCCC;
@@ -163,11 +157,15 @@
 }
 .container{
 	z-index:30;
-	margin:11px auto 0 auto;
-	perspective:5000px;
-	-webkit-perspective:5000px;
-	position:relative;
-
+	margin:11px auto;
+    background: url('/JQMApp/Images/pgBg.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+}
+#pagecontainer {
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
 #cover{
     background: url('/JQMApp/Images/pgBg.png');
@@ -207,7 +205,75 @@
 	-webkit-transform:rotateY(180deg);
 }
 
+#cover.unopened{
+	transform:rotateY(180deg);
+	-webkit-transform:rotateY(0deg);
+}
 #cover.opened{
 	transform:rotateY(-180deg);
 	-webkit-transform:rotateY(-180deg);
+    -webkit-transfor-origin: initial;
+}
+#cover.reopened {
+	transform:rotateY(-360deg);
+	-webkit-transform:rotateY(-360deg);
+}
+
+#cover.aopened{
+	transform:rotateY(180deg);
+	-webkit-transform:rotateY(180deg);
+    -webkit-transfor-origin: initial;
+}
+#cover.areopened {
+	transform:rotateY(360deg);
+	-webkit-transform:rotateY(360deg);
+}
+.nextfrontpg {
+    width: 50px;
+    height: 100%;
+    cursor: pointer;
+    background-color: #888888;
+    opacity: 0.5;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.prevfrontpg {
+    width: 50px;
+    height: 100%;
+    cursor: pointer;
+    background-color: #888888;
+    opacity: 0.5;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.msgbox {
+    width: 250px;
+    position: absolute;
+    border: 1px solid #404040;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    min-height: 100px;
+    font-family: Arial;
+    background-color: white;
+    font-weight: bold;
+}
+.title {
+    text-align: center;
+    line-height: 28px;
+    height: 32px;
+    background: linear-gradient(#6da9d3, #4a7caf);
+    width: 100%;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    color: white;
+}
+.errmsg {
+    width: 100%;
+    text-align: center;
+    margin: 10px 0 10px 0;
+}
+.msgbox {
+    z-index: 100;
 }

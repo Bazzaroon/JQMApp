@@ -77,9 +77,10 @@ var pages = {
         
     },
     Add: function (albumId) {
+        pages.pgData.length = 0;
         var myAlbum = JSON.parse($.cookie('album'));
         for (var x = 0; x < myAlbum[0].PageCount; x++) {
-            var photos = pages.GetPhotos(albumId, (x+1));
+            var photos = pages.GetPhotos(myAlbum[0].Id, (x+1));
             var pics = new Array();
             var NP = new pageData();
             for (var y = 0; y < photos.length; y++) {
@@ -112,6 +113,7 @@ var pages = {
     },
     NextPage: function () {
         var cPage = parseInt(global.activePage) + 1;
+        if (cPage > global.Album[0].PageCount) return;
         global.activePage = cPage;
         editor.ShowPage();
     },
@@ -120,6 +122,9 @@ var pages = {
         if (aPage < 1) return;
         global.activePage = aPage;
         editor.ShowPage();
+    },
+    AddANewPage: function() {
+        
     }
 
 };
@@ -237,7 +242,7 @@ var editor = {
     OpenImageEditor: function(G, fromScroller) {
         if (editor.isEditing) return;
         var url = G.src.replace('_t', '');
-        $('#editorpage').append("<div id='eddy'><img width='200' id='" + G.id + "' src='" + url + "'></div>");
+        $('#editorpage').append("<div id='eddy' data-index='0'><img width='200' id='" + G.id + "' src='" + url + "'></div>");
         editor.isEditing = true;
         $('#epanel').show();
         if (fromScroller) {
@@ -306,18 +311,19 @@ var editor = {
         editor.isEditing = true;
     },
     Cancel: function() {
-        if ($('#eddy').attr('data-index') != 0) {
+        if ($('#eddy').attr('data-index') != '0') {
             if (confirm('Remove this image?')) {
                 editor.RemoveImage();
                 return;
             }
         }
 
-        if ($('#eddy').attr('data-index') == 0) {
+        if ($('#eddy').attr('data-index') == '0') {
             $('#eddy').remove();
         } else {
             $('#eddy img').css({ border: 'none' });
         }
+        editor.isEditing = false;
     },
     Save: function() {
         if (!confirm('Update image?')) return;
@@ -383,3 +389,18 @@ var editor = {
 
 
 };
+
+function MsgBox(title, msg) {
+    var mkUp = "<div class='msgbox'>";
+    mkUp += "<div class='title'>" + title + "</div>";
+    mkUp += "<div class='errmsg'>" + msg + "</div>";
+    mkUp += "</div>";
+    $('body').append(mkUp);
+    $('.msgbox').css({ top: '150px', left: (($(window).width() / 2) - 125) + 'px' });
+
+    setTimeout(function() {
+        $('.msgbox').fadeOut(1000, function() {
+            $(this).remove();
+        });
+    }, 1500);
+}
