@@ -11,7 +11,9 @@ $.widget( "custom.vslider", {
 		length: 200,
 		thickness: 15,
 		value: 50,
-		dragging: false
+		dragging: false,
+		mousePosition: 0,
+		thumbPos:0
 	},
 
 	_create: function() {
@@ -47,17 +49,22 @@ $.widget( "custom.vslider", {
 	            break;
 	    }
 	    self._SetThumb();
-	    $('.thumb').on('mousedown', function() {
+
+	    $('.thumb').on('mousedown', function (evt) {
 	        opts.dragging = true;
+	        opts.thumbPos = $('.thumb').css('top');
+	        opts.mousePosition = evt.pageY;
 	    });
 
 	    $('.thumb').on('mouseup', function () {
 	        opts.dragging = false;
 	    });
 	    
-	    $('.thumb').on('mousemove', function () {
-	        if (opts.dragging) {
-	            
+	    $('.thumb').on('mousemove', function (evt) {
+	        if (opts.dragging && opts.orientation == 'vertical') {
+	            var mPos = opts.mousePosition - evt.pageY;
+	            console.log(mPos);
+	            $('.thumb').css({ top: (opts.thumbPos - mPos) + 'px' });
 	        }
 	    });
 

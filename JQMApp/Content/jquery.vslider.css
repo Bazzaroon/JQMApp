@@ -13,5 +13,6 @@
     border: 1px solid #2f4f4f;
     position: absolute;
     border-radius: 15px;
-    background-color:darkred
+    background-color: darkred;
+    cursor: pointer;
 }
