@@ -176,6 +176,7 @@
     <Content Include="Content\jquery.mobile.slider.css" />
     <Content Include="Content\jquery.mobile.theme-1.1.2.min.css" />
     <Content Include="Content\jquery.mThumbnailScroller.css" />
+    <Content Include="Content\nouislider.css" />
     <Content Include="Content\pgwslideshow.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -233,12 +234,13 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\jquery.vslider.css" />
     <None Include="Properties\PublishProfiles\JQMApp.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\cover.png" />
+    <Content Include="Images\dressbg.jpg" />
     <Content Include="Images\homepage.jpg" />
     <Content Include="Images\pgBg.png" />
+    <Content Include="Images\weddingbg.PNG" />
     <Content Include="Scripts\2.3.0-crypto-sha1.js" />
     <Content Include="Scripts\jqm.js" />
     <Content Include="Scripts\jqmViewer.js" />
@@ -264,6 +266,7 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\nouislider.js" />
     <Content Include="Scripts\pgwslideshow.min.js" />
     <Content Include="Scripts\UserPage.js" />
     <Content Include="Scripts\vertical-slider.jquery.js" />
@@ -292,7 +295,6 @@
     <Content Include="Views\Album\Index.cshtml" />
     <Content Include="Views\Shared\_AlbumLayout.cshtml" />
     <Content Include="Views\WeddingAlbum\Index.cshtml" />
-    <Content Include="Scripts\jquery.vslider.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

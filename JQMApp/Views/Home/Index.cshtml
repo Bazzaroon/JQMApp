@@ -13,7 +13,7 @@
     <link href="~/Content/jquery.mobile-1.1.2.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.mThumbnailScroller.css" rel="stylesheet" />
     <link href="~/Content/pgwslideshow.css" rel="stylesheet" />
-    <link href="~/Content/jquery.vslider.css" rel="stylesheet" />
+    <link href="~/Content/nouislider.css" rel="stylesheet" />
 
     <script src="~/Scripts/jquery-1.8.2.js"></script>
     <script src="~/Scripts/jquery.cookie.js"></script>
@@ -24,7 +24,7 @@
     <script src="~/Scripts/jqm.js"></script>
     <script src="~/Scripts/2.3.0-crypto-sha1.js"></script>
     <script src="~/Scripts/pgwslideshow.min.js"></script>
-    <script src="~/Scripts/jquery.vslider.js"></script>
+    <script src="~/Scripts/nouislider.js"></script>
 
 </head>
 
@@ -208,10 +208,9 @@
     
     function IsMobile() {
         var isMobile = false;
-        var minDim = Math.min($(window).width(), $(window).height());
-        if (minDim < 500) {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             isMobile = true;
-        }
+            }
         return isMobile;
     }
     function View() {

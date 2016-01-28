@@ -328,7 +328,7 @@ var editor = {
         $('#eddy img').css({ border: 'none' });
         $('#eddy').removeAttr('id');
         $(G).parent().attr('id', 'eddy');
-        $(G).css({ border: '2px solid Red' });
+        $(G).css({ border: '2px solid Red', 'box-sizing': 'border-box' });
         $('#epanel').show();
         editor.isEditing = true;
     },
