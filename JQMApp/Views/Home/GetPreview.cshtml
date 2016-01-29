@@ -1,0 +1,33 @@
+﻿@{
+    @model IEnumerable<byte[]>
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>GetPreview</title>
+    </head>
+    <body>
+        <div>
+            @{
+                int counter = 0;
+                foreach (var arr in Model)
+                {
+                    counter = counter + 1;
+                    <div align="center"><img width="200" onclick="LoadImage(@counter)" src="data:image/png;base64,@Convert.ToBase64String(arr)" /></div>
+
+                }
+            }
+        </div>
+        
+    </body>
+</html>
+
+<script>
+    function LoadImage(dex) {
+        //TODO
+    }
+</script>

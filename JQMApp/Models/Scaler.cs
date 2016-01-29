@@ -84,6 +84,44 @@ namespace JQMApp.Models
                 data = stream.ToArray();
             }
             return data;
+        }
+
+        public byte[][] CreatePreviewThumbs(HttpPostedFileBase postedFile, int width)
+        {
+            int height = 0;
+            var thumbs = new byte[2][];
+            Image image = Image.FromStream(postedFile.InputStream);
+            height = this.GetHeight(image.Width, image.Height, width);
+
+            Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(image, 0, 0, width, height);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Jpeg);
+                thumbs[0] = stream.ToArray();
+            }
+
+            // Create second thumbnail
+            image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            height = this.GetHeight(image.Width, image.Height, width);
+
+            bitmap = new Bitmap(width, height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(image, 0, 0, width, height);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Jpeg);
+                thumbs[1] = stream.ToArray();
+            }
+
+            return thumbs;
 
         }
     }

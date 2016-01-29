@@ -35,7 +35,7 @@
     <div data-role="header" data-theme="b">
         <h1>Upload Image</h1>
     </div>
-    <form id="uploadform" method="post" action="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/Home/AddImage" enctype="multipart/form-data" data-ajax="false">
+    <form id="uploadform" method="post" action="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/Home/GetPreview" enctype="multipart/form-data" data-ajax="false">
         <div style="width:250px;margin:20px auto">
             <input id="uploadfile" name="uploadfile" style="font-family:Verdana;font-size:14pt" type="file" value="Browse" />
         </div>
@@ -43,7 +43,7 @@
             <input id="uploadfilebutton" type="submit" value="Upload" data-theme="b" onclick="ValidateSubmission(); return false;"/>
             <input id="albumid" name="albumid" type="hidden" value="1000" />
             <input id="userid" name="userid" type="hidden" value="18" />
-            <input type="hidden" id="orientation" name="orientation" value=""/>
+            <input type="hidden" id="orientation" name="orientation" value="portrait"/>
         </div>
     </form>
 </div>
@@ -58,17 +58,14 @@
             $('#albumid').val(global.AlbumId);
             $('#userid').val(userdata.Id);
         }
-        if (jQuery.browser.mobile) {
-            $('#orientation').val('portrait');
-        }
+
+            $(window).on('orientationchange', function (event) {
+                $('#orientation').val(event.orientation);
+            });
 
     });
 
-    if (jQuery.browser.mobile) {
-        $(window).on('orientationchange', function(event) {
-            $('#orientation').val(event.orientation);
-        });
-    }
+
 
     function ValidateSubmission() {
         if (!$('#uploadfile').val().length == 0) {

@@ -36,6 +36,18 @@ namespace JQMApp.Controllers
             return View(users);
         }
 
+        public ActionResult GetPreview(HttpPostedFileBase file)
+        {
+            
+            HttpPostedFileBase postedFile = Request.Files["uploadfile"];
+            var scaler = new Scaler();
+
+            ViewBag.UploadedFileName = postedFile.FileName;
+
+            var streams =  scaler.CreatePreviewThumbs(postedFile, 996);
+            return View(streams);
+        }
+        
         public ActionResult AddImage(HttpPostedFileBase file)
         {
             
@@ -94,6 +106,7 @@ namespace JQMApp.Controllers
 
         }
 
+        
         public void CreateThumb(HttpPostedFileBase file)
         {
             var scaler = new Scaler();

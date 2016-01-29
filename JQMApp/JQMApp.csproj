@@ -133,6 +133,7 @@
     <Compile Include="Controllers\AlbumController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrientationController.cs" />
     <Compile Include="Controllers\SiteUserController.cs" />
     <Compile Include="Controllers\WeddingAlbumController.cs" />
     <Compile Include="Global.asax.cs">
@@ -295,6 +296,8 @@
     <Content Include="Views\Album\Index.cshtml" />
     <Content Include="Views\Shared\_AlbumLayout.cshtml" />
     <Content Include="Views\WeddingAlbum\Index.cshtml" />
+    <Content Include="Views\Orientation\Index.cshtml" />
+    <Content Include="Views\Home\GetPreview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
