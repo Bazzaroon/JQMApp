@@ -177,8 +177,14 @@
     <Content Include="Content\jquery.mobile.slider.css" />
     <Content Include="Content\jquery.mobile.theme-1.1.2.min.css" />
     <Content Include="Content\jquery.mThumbnailScroller.css" />
+    <Content Include="Content\lightbox\css\lightbox.css" />
+    <Content Include="Content\lightbox\images\close.png" />
+    <Content Include="Content\lightbox\images\loading.gif" />
+    <Content Include="Content\lightbox\images\next.png" />
+    <Content Include="Content\lightbox\images\prev.png" />
     <Content Include="Content\nouislider.css" />
     <Content Include="Content\pgwslideshow.css" />
+    <Content Include="Content\quickbox.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -253,6 +259,7 @@
     <Content Include="Scripts\jquery-ui-1.8.24.js" />
     <Content Include="Scripts\jquery-ui-1.8.24.min.js" />
     <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery.colorbox.js" />
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.mobile-1.1.2.min.js" />
     <Content Include="Scripts\jquery.mobile-1.4.5.min.js" />
@@ -266,9 +273,11 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
+    <Content Include="Scripts\lightbox.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\nouislider.js" />
     <Content Include="Scripts\pgwslideshow.min.js" />
+    <Content Include="Scripts\quickbox.js" />
     <Content Include="Scripts\UserPage.js" />
     <Content Include="Scripts\vertical-slider.jquery.js" />
     <Content Include="Scripts\_references.js" />

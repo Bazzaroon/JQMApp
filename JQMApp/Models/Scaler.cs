@@ -67,6 +67,25 @@ namespace JQMApp.Models
             return data;
         }
 
+        public byte[] CreateThumbNailFromPreview(Stream buffer, int height)
+        {
+            byte[] data;
+            Image image = Image.FromStream(buffer);
+            int width = this.GetWidth(image.Width, image.Height, height);
+            Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(image, 0, 0, width, height);
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                bitmap.Save(stream, ImageFormat.Jpeg);
+                data = stream.ToArray();
+            }
+            return data;
+        }
+        
         public byte[] CreateThumbNail(HttpPostedFileBase postedFile, int height)
         {
             byte[] data;

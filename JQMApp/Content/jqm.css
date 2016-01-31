@@ -65,6 +65,7 @@
 #eddy img{
     cursor:pointer;
     border:2px solid red;
+    box-sizing: border-box;
 }
 
 #editorpanel{
@@ -279,10 +280,12 @@
 }
 .outer {
     background: url('/JQMApp/Images/dressbg.jpg');
-    background-size: auto 100%;
     background-repeat:no-repeat;
     /*background:linear-gradient(#64958f, #9ebebb);*/
 }
 .frame {
-    box-shadow: 10px 10px 10px  #888888;
+    box-shadow: 7px 7px 7px  #888888;
+}
+.colorCasket {
+    z-index: 700;
 }

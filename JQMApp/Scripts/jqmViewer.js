@@ -11,7 +11,6 @@ var jqmView = {
     windowScale: 100,
     myAlbum: null,
     Init: function() {
-
         jqmView.viewElement = $('.front');
         
         if ($(window).width() > $(window).height()) {
@@ -143,8 +142,25 @@ var jqmView = {
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = jqmView.GetScaledUnits(pg.ImageData[x], x);
             var L = parseInt(units.l) + 12;
-            $(el).append("<div class='frame' style='position:absolute;left:" + L + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+            var mkUp = "<div class='frame' style='position:absolute;left:" + L + ";top:" + units.t + "'>";
+            mkUp += "<img id='pic" + x + "' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>";
+
+            $(el).append(mkUp);
+            if (jqmView.IsMobile()) {
+                $('#pic' + x).on('touchstart', function() {
+                    jqmView.OpenLightBox($(this));
+                });
+            } else {
+                $('#pic' + x).on('click', function () {
+                    jqmView.OpenLightBox($(this));
+                });
+
+            }
         }
+    },
+    
+    OpenLightBox: function (el) {
+        quickbox.Create(el.attr('src'));
     },
     
     GetScaledUnits: function (iData, dex) {
@@ -167,7 +183,15 @@ var jqmView = {
             $('#scroller').animate({ left: '+=' + $(window).width().toString() }, 400);
             jqmView.activePage--;
         }
+    },
+    IsMobile: function () {
+        var isMobile = false;
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            isMobile = true;
+        }
+        return isMobile;
     }
+
 };
 
 var jax = {
