@@ -307,6 +307,7 @@
     <Content Include="Views\WeddingAlbum\Index.cshtml" />
     <Content Include="Views\Orientation\Index.cshtml" />
     <Content Include="Views\Home\GetPreview.cshtml" />
+    <Content Include="Views\Home\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

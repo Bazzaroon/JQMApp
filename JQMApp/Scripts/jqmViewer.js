@@ -143,15 +143,15 @@ var jqmView = {
             var units = jqmView.GetScaledUnits(pg.ImageData[x], x);
             var L = parseInt(units.l) + 12;
             var mkUp = "<div class='frame' style='position:absolute;left:" + L + ";top:" + units.t + "'>";
-            mkUp += "<img id='pic" + x + "' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>";
+            mkUp += "<img id='pic" + pgNum + x + "' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>";
 
             $(el).append(mkUp);
             if (jqmView.IsMobile()) {
-                $('#pic' + x).on('touchstart', function() {
+                $('#pic' + pgNum +x).on('touchstart', function() {
                     jqmView.OpenLightBox($(this));
                 });
             } else {
-                $('#pic' + x).on('click', function () {
+                $('#pic' + pgNum + x).on('click', function () {
                     jqmView.OpenLightBox($(this));
                 });
 

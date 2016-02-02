@@ -1,0 +1,4 @@
+list user images chronologically
+enlarge from centre
+remove a page
+complete lightbox - use pagenumber in pic index

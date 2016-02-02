@@ -88,9 +88,12 @@
         <a href="javascript:RegisterUser()" data-role="button" data-icon="back"  data-theme="b" data-inline="true">Submit</a>
 
     </div>
+    
+
     @Html.Partial("Cover")
     @Html.Partial("Editor")
     @Html.Partial("ImageManager")
+    @Html.Partial("Settings")
     
     <div id="browser" data-role="page">
        <h3>Please use a compatible browser. eg: Chrome</h3>
@@ -177,6 +180,10 @@
         $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
+        if (uData.Administrator) {
+            $('#llist').append("<li><a href='#settings'>Settings</a></li>");
+        }
+        
         $('#llist').listview('refresh', true);
 
         var data = jax.GetData(query);
