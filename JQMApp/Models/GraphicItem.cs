@@ -49,16 +49,16 @@ namespace JQMApp.App.Models
             return data.ExecuteObject<GraphicItem>(query).FirstOrDefault();
         }
 
-        public IEnumerable<GraphicItem> GetAllForUser(int userId)
+        public IEnumerable<GraphicItem> GetAllForUser(int userId, int count)
         {
             string query = string.Empty;
             if (userId == 0)
             {
-                query = "select * from Graphic";
+                query = "select top " + count + " * from Graphic order by CaptureDate DESC";
             }
             else
             {
-                query = "select * from Graphic where UserId = " + userId.ToString() + " order by CaptureDate ASC";
+                query = "select * from Graphic where UserId = " + userId.ToString() + " order by CaptureDate DESC";
             }
             var data = new WeddingData();
             return data.ExecuteObject<GraphicItem>(query).ToList();

@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WebGrease.Activities;
 
 namespace JQMApp.Models
@@ -20,7 +22,7 @@ namespace JQMApp.Models
         public int AlbumId { get; set; }
         public string PasswordHash { get; set; }
 
-
+        readonly string _connStr = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
 
         public Users Get(string emailaddress, int albumId, string passwordhash)
         {
@@ -31,9 +33,38 @@ namespace JQMApp.Models
             return user.FirstOrDefault();
         }
 
+        public void Update(string _user)
+        {
+            JObject user = JObject.Parse(_user);
+
+            var cmd = new SqlCommand();
+            string query = "update users set UserName = @username, Email = @email, Administrator = @administrator, Active = @active";
+            query += " where Id = @userId";
+            cmd.CommandText = query;
+
+            cmd.Parameters.Add(new SqlParameter("@username", user["UserName"].ToString()));
+            cmd.Parameters.Add(new SqlParameter("@email", user["Email"].ToString()));
+            cmd.Parameters.Add(new SqlParameter("@administrator", (bool)user["Administrator"]));
+            cmd.Parameters.Add(new SqlParameter("@active", (bool)user["Active"]));
+            cmd.Parameters.Add(new SqlParameter("@userId", (int)user["Id"]));
+            
+            cmd.Connection = new SqlConnection(_connStr);
+
+            try
+            {
+                cmd.Connection.Open();
+                cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+            }
+            catch (SqlException sqlException)
+            {
+                cmd.Connection.Close();
+            }
+
+        }
+
         public void RegisterUser(Users user)
         {
-            string connStr = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
             var cmd = new SqlCommand();
             string query = "insert into users (UserName, Email, PasswordHash, AlbumId) values (@username, @mailaddress, @pw, @albumid)";
             cmd.CommandText = query;
@@ -45,7 +76,7 @@ namespace JQMApp.Models
             cmd.Parameters.Add(new SqlParameter("@pw", user.PasswordHash));
             cmd.Parameters.Add(new SqlParameter("@albumid", user.AlbumId));
 
-            cmd.Connection = new SqlConnection(connStr);
+            cmd.Connection = new SqlConnection(_connStr);
 
             try
             {

@@ -5,7 +5,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html style="background-color:black">
     <head>
         <meta name="viewport" content="width=device-width" />
         <title>Slide Show</title>
@@ -21,14 +21,15 @@
     </head>
     <body style="margin:0">
         <div>
-            <div onclick="GoToMenu()" class="mainmenubutton">Home</div>
+            <div style="margin-top:10px"></div>
             <div class="showContainer">
-                <ul style="padding:0 !important; background-color:white !important" class="pgwSlideshow">
+                <ul style="padding:0 !important; background-color:black !important" class="pgwSlideshow">
                     @foreach (var slide in Model)
                     {
                         <li><img src="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/@slide.Url"></img></li>
                     }
                 </ul>
+                <div id="msg" style="margin:0 auto;color:white;font-family:Arial;font-size:12pt">Tap or click to exit</div>
             </div>
         </div>
     </body>
@@ -41,14 +42,22 @@
             autoSlide: true,
             displayControls:false
         });
+
+        setTimeout(function() {
+            $('#msg').fadeOut(1000);
+        }, 2000);
     });
 
     $(window).on('resize', function() {
         ResizeWidth();
     });
+
+    $('body').on('click', function() {
+        location.href = $.cookie('location') + "?mode=back";
+    });
     
     function GoToMenu() {
-        location.href = $.cookie('location');
+        location.href = $.cookie('location') + "?mode=back";
     }
     
     function ResizeWidth() {

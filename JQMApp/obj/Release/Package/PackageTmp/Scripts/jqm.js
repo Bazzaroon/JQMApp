@@ -145,7 +145,10 @@ var editor = {
     isEditing: false,
     imageId: null,
     imagePhoto: null,
-    pageDisplayed:$('.front'),
+    pageDisplayed: $('.front'),
+    dragging: false,
+    dragX: 0,
+    dragY: 0,
 
     GetThumbs: function (el, pfx) {
         var offset = 0;
@@ -167,7 +170,8 @@ var editor = {
             $('#editorpage').css({ margin: '10px auto' });
         }
 
-        $(window).on('resize', function() {
+
+        $(window).on('resize', function () {
             offset = $(document).height() > $(document).width() ? 250 : 185;
             aHeight = $(document).height() - offset;
             aWidth = parseInt((aHeight * 80) / 100);
@@ -206,6 +210,23 @@ var editor = {
             $('#xrange').val($('#eddy img').attr('width')).slider('refresh');
             $('#yrange').val('#eddy').css('width').slider('refresh');
         });
+
+
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+
+            $('#eddy').on('touchstart', function () {
+                editor.dragging = true;
+            });
+
+            $('#eddy').on('touchmove', function (evt) {
+                $(this).css({ left: evt.originalEvent.changedTouches[0].pageX - parseInt($(this).width() / 2) });
+                $(this).css({ top: evt.originalEvent.changedTouches[0].pageY - parseInt($(this).height() / 2) });
+            });
+
+            $('#eddy').on('touchend', function () {
+                editor.dragging = false;
+            });
+        }
 
 
         if (editor.isEditor) {
@@ -250,7 +271,7 @@ var editor = {
             $('#yrange').slider('disable');
         }
 
-    },
+   },
     MapEddyToPhoto: function() {
         var E = $('#eddy');
         E.css({ left: photo.OLeft + 'px', top: photo.OTop + 'px', width: photo.Width + 'px', height: '100px' });
@@ -288,7 +309,7 @@ var editor = {
         var pg = pages.pgData[pgNum - 1];
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = editor.GetScaledUnits(pg.ImageData[x]);
-            $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img onclick='editor.Edit(this)' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+            $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
         }
     },
     
@@ -304,9 +325,10 @@ var editor = {
     
     Edit: function(G) {
         editor.isEditing = false;
+        $('#eddy img').css({ border: 'none' });
         $('#eddy').removeAttr('id');
         $(G).parent().attr('id', 'eddy');
-        $(G).css({ border: '2px solid Red' });
+        $(G).css({ border: '2px solid Red', 'box-sizing': 'border-box' });
         $('#epanel').show();
         editor.isEditing = true;
     },

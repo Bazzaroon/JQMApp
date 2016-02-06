@@ -28,6 +28,7 @@ namespace JQMApp.Controllers
             return data.GetAlbum(albumId);
         }
 
+
         [HttpGet]
         public void DeletePhoto(int Id)
         {
@@ -62,6 +63,25 @@ namespace JQMApp.Controllers
             Logging.log("Added a page to album " + albumId.ToString());
             var album = new Album();
             album.AddPage(albumId);
+        }
+
+        [HttpPost]
+        public void UpdateUser()
+        {
+            string P = string.Empty;
+            using (var reader = new StreamReader(HttpContext.Request.InputStream))
+            {
+                P = reader.ReadToEnd();
+            }
+            var _user = new Users();
+            _user.Update(P);
+        }
+
+        [HttpGet]
+        public string GetHomePageImages(int albumId)
+        {
+            var data = new WeddingData();
+            return data.GetHomePageImages(albumId);
         }
 
         [HttpPost]
@@ -126,5 +146,23 @@ namespace JQMApp.Controllers
             return json;
         }
 
+        [HttpPost]
+        public void UpdateAlbum()
+        {
+            string data = string.Empty;
+            using (var reader = new StreamReader(HttpContext.Request.InputStream))
+            {
+                data = reader.ReadToEnd();
+            }
+            var _album = new Album();
+            _album.Update(data);
+        }
+
+        [HttpGet]
+        public void UpdateHomePage(string fileName, int albumId)
+        {
+            var album = new Album();
+            album.UpdateHomePage(fileName, albumId);
+        }
     }
 }

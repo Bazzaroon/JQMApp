@@ -45,6 +45,17 @@ namespace JQMApp.Models
             return json;
         }
 
+        public string GetHomePageImages(int albumId)
+        {
+            string json = string.Empty;
+            string query = "select * from graphic where albumid = " + albumId + " and url like '%_home%'";
+
+            var images = ExecuteObject<GraphicItem>(query);
+            json = JsonConvert.SerializeObject(images);
+
+            return json;
+        }
+
         public string GetAllThumbs(int albumId)
         {
             string json = string.Empty;

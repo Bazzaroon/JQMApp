@@ -8,10 +8,9 @@ var jqmView = {
     pgData: [],
     aHeight: 0,
     aWidth: 0,
-    windowScale: 90,
+    windowScale: 100,
     myAlbum: null,
     Init: function() {
-
         jqmView.viewElement = $('.front');
         
         if ($(window).width() > $(window).height()) {
@@ -123,11 +122,11 @@ var jqmView = {
 
 
     LoadAllViewPages: function (isInitial) {
-        $('#pagecontainer').css({ height: ($(window).height() - $('#viewpage div:eq(0)').height() - 5) + 'px' });
+        $('#pagecontainer').css({ height: ($(window).height() - $('#viewpage div:eq(0)').height() - 1) + 'px' });
         jqmView.myAlbum = JSON.parse($.cookie('album'));
 
         for (var x = 0; x < jqmView.myAlbum[0].PageCount; x++) {
-            var mkUp = "<div id='outer' align='center' style='display:inline-block;width:" + $(window).width() + ";height:" + $(window).height() + "'><div id='pImage" + x + "' class='container'></div></div>";
+            var mkUp = "<div id='outer' class='outer' align='center' style='display:inline-block;width:" + $(window).width() + ";height:" + $(window).height() + "'><div id='pImage" + x + "' class='container'></div></div>";
             $('#scroller').append(mkUp);
             jqmView.PutPage($('#pImage' + x), x + 1);
         }
@@ -142,8 +141,26 @@ var jqmView = {
         var pg = jqmView.pgData[pgNum - 1];
         for (var x = 0; x < pg.ImageData.length; x++) {
             var units = jqmView.GetScaledUnits(pg.ImageData[x], x);
-            $(el).append("<div class='photoclass' style='position:absolute;left:" + units.l + ";top:" + units.t + "'><img width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>");
+            var L = parseInt(units.l) + 12;
+            var mkUp = "<div class='frame' style='position:absolute;left:" + L + ";top:" + units.t + "'>";
+            mkUp += "<img id='pic" + pgNum + x + "' width='" + units.w + "' src='" + $.cookie('location') + pg.ImageData[x].Url + "'></img></div>";
+
+            $(el).append(mkUp);
+            if (jqmView.IsMobile()) {
+                $('#pic' + pgNum +x).on('touchstart', function() {
+                    jqmView.OpenLightBox($(this));
+                });
+            } else {
+                $('#pic' + pgNum + x).on('click', function () {
+                    jqmView.OpenLightBox($(this));
+                });
+
+            }
         }
+    },
+    
+    OpenLightBox: function (el) {
+        quickbox.Create(el.attr('src'));
     },
     
     GetScaledUnits: function (iData, dex) {
@@ -166,7 +183,15 @@ var jqmView = {
             $('#scroller').animate({ left: '+=' + $(window).width().toString() }, 400);
             jqmView.activePage--;
         }
+    },
+    IsMobile: function () {
+        var isMobile = false;
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            isMobile = true;
+        }
+        return isMobile;
     }
+
 };
 
 var jax = {

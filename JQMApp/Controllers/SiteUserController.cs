@@ -21,7 +21,7 @@ namespace JQMApp.Controllers
             ViewBag.UserEmail = user.Email;
 
             var graphicItem = new GraphicItem();
-            var graphicItems = graphicItem.GetAllForUser(id);
+            var graphicItems = graphicItem.GetAllForUser(id, 0);
 
             return View(graphicItems);
         }

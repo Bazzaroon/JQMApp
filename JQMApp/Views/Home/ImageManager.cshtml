@@ -34,6 +34,7 @@
 <div id="upload" data-role="page">
     <div data-role="header" data-theme="b">
         <h1>Upload Image</h1>
+        <a href="javascript:GoHome()" data-theme="b" data-icon="back">Cancel</a>
     </div>
     <form id="uploadform" method="post" action="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/Home/GetPreview" enctype="multipart/form-data" data-ajax="false">
         <div style="width:250px;margin:20px auto">
@@ -43,7 +44,7 @@
             <input id="uploadfilebutton" type="submit" value="Upload" data-theme="b" onclick="ValidateSubmission(); return false;"/>
             <input id="albumid" name="albumid" type="hidden" value="1000" />
             <input id="userid" name="userid" type="hidden" value="18" />
-            <input type="hidden" id="orientation" name="orientation" value="portrait"/>
+            <input type="hidden" id="orientation" name="orientation" value=""/>
         </div>
     </form>
 </div>
@@ -72,6 +73,11 @@
             $('#uploadform').submit();
         }
     }
+    
+    function GoHome() {
+        location.href = $.cookie('location') + "?mode=back";
+    }
+    
     
 </script>
 

@@ -8,7 +8,7 @@
 <div id="viewpage" data-role="page">
     <div data-role="header" data-theme="b" data-position="fixed">
         <h1></h1>
-        <a href="/JQMApp" rel="external" data-theme="b" data-icon="forward">Back</a>
+        <a href="javascript:GoHome()" data-rel="external" data-theme="b" data-icon="forward">Back</a>
     </div>
 
     <div id="pagecontainer" align="center">
@@ -46,7 +46,7 @@
     }
     
     function GoHome() {
-        location.href = "/JQMApp/Home/Index";
+        location.href = $.cookie('location') + "?mode=back";
     }
     
 

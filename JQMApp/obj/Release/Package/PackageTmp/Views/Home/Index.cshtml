@@ -1,5 +1,6 @@
 ﻿@{
     Layout = null;
+    var mode = Request.QueryString["mode"];
 }
 
 <!DOCTYPE HTML>
@@ -13,6 +14,7 @@
     <link href="~/Content/jquery.mobile-1.1.2.min.css" rel="stylesheet" />
     <link href="~/Content/jquery.mThumbnailScroller.css" rel="stylesheet" />
     <link href="~/Content/pgwslideshow.css" rel="stylesheet" />
+    <link href="~/Content/nouislider.css" rel="stylesheet" />
 
     <script src="~/Scripts/jquery-1.8.2.js"></script>
     <script src="~/Scripts/jquery.cookie.js"></script>
@@ -23,11 +25,12 @@
     <script src="~/Scripts/jqm.js"></script>
     <script src="~/Scripts/2.3.0-crypto-sha1.js"></script>
     <script src="~/Scripts/pgwslideshow.min.js"></script>
+    <script src="~/Scripts/nouislider.js"></script>
 
 </head>
 
 <body>
-    <div id="home" data-role="page" data-theme="b" data-content-theme="b">
+    <div id="home" data-role="page" data-theme="b" data-content-theme="b" data-cache="false">
         <div data-role="header" data-theme="b">
             <h1></h1>
             <a id="loginbutton" href="#login" data-icon="forward" class="ui-btn-right">&nbsp;Log In&nbsp;</a>
@@ -55,6 +58,10 @@
     </div>
     
     <div id="chooseview" data-role="page">
+        <div data-role="header" data-theme="b" data-position="fixed">
+            <h1>Main Menu</h1>
+            <a id="closebutton" data-direction="reverse" href='javascript:GoStraightHome()' data-icon="back">Home</a>
+        </div>
         <div style="margin:20px auto;width:300px;">
             <ul id="llist" data-role="listview" data-inset="true" data-theme="b">
             </ul>
@@ -62,9 +69,6 @@
                 <h3>User Images</h3>
                 <ul data-filter="true" id="emaillist" data-role="listview" data-inset="true" data-theme="b" style="margin:10px 0 0 0"></ul>
             </div>
-        </div>
-        <div data-role="footer" data-theme="b" data-position="fixed">
-            <a id="closebutton" href='#home' data-icon="forward">&nbsp;Close&nbsp;</a>
         </div>
     </div>
     
@@ -86,9 +90,12 @@
         <a href="javascript:RegisterUser()" data-role="button" data-icon="back"  data-theme="b" data-inline="true">Submit</a>
 
     </div>
+    
+
     @Html.Partial("Cover")
     @Html.Partial("Editor")
     @Html.Partial("ImageManager")
+    @Html.Partial("Settings")
     
     <div id="browser" data-role="page">
        <h3>Please use a compatible browser. eg: Chrome</h3>
@@ -100,24 +107,34 @@
     
     $(document).ready(function () {
 
-        if ('@(Request.QueryString["mode"])' == 'mainmenu') {
-            FillUserList();
-            //$.mobile.changePage($.cookie('location') + '#chooseview');
-        }
+        
+        //if ('@(Request.QueryString["mode"])' == 'mainmenu') {
+        //$.mobile.changePage($.cookie('location') + '#chooseview');
+        //}
 
         global.ScreenWidth = $(window).width();
         global.ScreenHeight = $(window).height();
-        
+
         $('#viewbutton').hide();
         var loc = 'http://' + location.host + '/JQMApp/';
         $.cookie('location', loc, { expires: 30, path: '/' });
 
         var query = 'Data/GetAlbumDetails?albumId=' + global.AlbumId;
-            global.Album = jax.GetData(query, ' album ');
-            $.cookie('album', JSON.stringify(global.Album), { expires: 30, path: '/' });
-            album = $.cookie('album');
+        global.Album = jax.GetData(query, ' album ');
+        $.cookie('album', JSON.stringify(global.Album), { expires: 30, path: '/' });
+        album = $.cookie('album');
+        var _album = JSON.parse(album);
 
-        if ($.cookie('userdata') != undefined) {
+        var modeCheck = @(mode == "back" ?"true":"false");
+        if (modeCheck) {
+            FillUserList();
+        } else {
+           var backgroundImageClassItem = "url('" + loc + $.trim(_album[0].CoverImage) + "') no-repeat top center fixed";
+            $('#home').css({ background:  backgroundImageClassItem});
+        }
+ 
+
+            if ($.cookie('userdata') != undefined) {
             var user = JSON.parse($.cookie('userdata'));
             $('#home div h1').text(user.UserName);
             $('#loginbutton').hide();
@@ -172,9 +189,14 @@
         var query = 'Data/GetUserAddresses?albumId=' + global.AlbumId;
         $('#llist').empty();
         $('#llist').append("<li><a  rel='external' href='" + $.cookie('location') + "WeddingAlbum'>" + global.Album[0].Name + "</a></li>");
-        $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album'>Slide Show</a></li>");
+        $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album?slideCount=" + global.Album[0].Slides + "'>Slide Show</a></li>");
         $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
+       
+        if (uData.Administrator && !IsMobile) {
+            $('#llist').append("<li><a href='#settings'>Settings</a></li>");
+        }
+        
         $('#llist').listview('refresh', true);
 
         var data = jax.GetData(query);
@@ -201,15 +223,18 @@
     function Logout() {
         $('#viewbutton').hide();
         $.removeCookie('userdata', { path: '/' });
-        $.mobile.changePage($.cookie('location') + 'Home', { reloadPage: true, transition: 'flip' });
+        location.href = $.cookie('location');
+    }
+    
+    function GoStraightHome() {
+        location.href = $.cookie('location');
     }
     
     function IsMobile() {
         var isMobile = false;
-        var minDim = Math.min($(window).width(), $(window).height());
-        if (minDim < 500) {
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             isMobile = true;
-        }
+            }
         return isMobile;
     }
     function View() {

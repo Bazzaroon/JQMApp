@@ -20,6 +20,8 @@ namespace JQMApp.Controllers
         private int userId;
         private string orientation;
 
+        public string HomePageFileName { get; set; }
+        public int AlbumId { get; set; }
 
         public ActionResult Index()
         {
@@ -41,6 +43,15 @@ namespace JQMApp.Controllers
         public ActionResult GetPreview(HttpPostedFileBase file)
         {
             
+            ViewBag.Mode = "";
+            if (Request.Form["userid"] == "homepage")
+            {
+                AddImage(file);
+                var album = new Album();
+                album.UpdateHomePage("Images/" + HomePageFileName, 1000);
+                return RedirectToAction("Index", "Home");
+            }
+
             HttpPostedFileBase postedFile = Request.Files["uploadfile"];
             var scaler = new Scaler();
 
@@ -88,11 +99,25 @@ namespace JQMApp.Controllers
 
         }
 
-        public ActionResult AddImage(HttpPostedFileBase file)
+        public void AddHomePageImage()
         {
             
+        }
+
+        public ActionResult AddImage(HttpPostedFileBase file)
+        {
+
+            int imageWidth = 996;
+            if (Request.Form["userid"] == "homepage")
+            {
+                imageWidth = 1920;
+            }
+            else
+            {
+                userId = int.Parse(Request.Form["userid"]);
+            }
+
             albumId = int.Parse(Request.Form["albumid"]);
-            userId = int.Parse(Request.Form["userid"]);
             orientation = Request.Form["orientation"];
             var scaler = new Scaler();
 
@@ -101,36 +126,23 @@ namespace JQMApp.Controllers
 
             if (Request.Files["uploadfile"].FileName == "") Index();
 
-            byte[] buffer = scaler.ScaleImage(postedFile, 996, orientation);
-
-            string ftpUrl = string.Concat(System.Configuration.ConfigurationManager.AppSettings["FtpUploadUrl"], Path.GetFileName(postedFile.FileName));
-
-            var request = (FtpWebRequest)FtpWebRequest.Create(ftpUrl);
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Proxy = null;
-            request.UseBinary = true;
-            string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"]; 
-            if ( hostName == "192.168.0.19" || hostName == "localhost")
-            {
-                request.Credentials = new NetworkCredential("Barry Tait", "repro20");
-            }
-            else
-            {
-                request.Credentials = new NetworkCredential("ftp80152901-0", "Reprosoft1");
-            }
-
-            
-            using (Stream writer = request.GetRequestStream())
-            {
-                writer.Write(buffer, 0, buffer.Length);
-            }
-
-            FtpWebResponse response = (FtpWebResponse)request.GetResponse();
-
+            byte[] buffer = scaler.ScaleImage(postedFile, imageWidth, orientation);
+           
+            HomePageFileName =  Path.GetFileName(postedFile.FileName).Replace(".","_home.");
+ 
             var dataModel = new GraphicItem();
 
             //TODO: Incomplete
-            dataModel.Add(string.Concat("Images/", Path.GetFileName(postedFile.FileName)), albumId, userId);
+            if (Request.Form["userid"] == "homepage")
+            {
+                dataModel.Add(string.Concat("Images/", HomePageFileName), albumId, userId);
+                PostFileViaFtp(buffer, HomePageFileName);
+            }
+            else
+            {
+                dataModel.Add(string.Concat("Images/", Path.GetFileName(postedFile.FileName)), albumId, userId);
+                PostFileViaFtp(buffer, postedFile.FileName);
+            }
 
             CreateThumb(postedFile);
 

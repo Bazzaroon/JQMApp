@@ -17,7 +17,7 @@
     width: 100%;
 }
 #home {
-    background: url(../Images/homepage.jpg) no-repeat top center fixed;
+    /*background: url(../Images/homepage.jpg) no-repeat top center fixed;*/
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -149,7 +149,7 @@
     border: 1px inset #3a5e81;
     color: white;
     cursor: pointer;
-    margin: 3px 0 0 5px;
+    margin: 3px auto;
 }
 .flip {
     position: relative;
