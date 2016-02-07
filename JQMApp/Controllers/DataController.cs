@@ -58,6 +58,13 @@ namespace JQMApp.Controllers
         }
 
         [HttpGet]
+        public void RemovePage(int albumId, int pageNumber)
+        {
+            var album = new Album();
+            album.RemovePage(albumId, pageNumber);
+        }
+
+        [HttpGet]
         public void AddPage(int albumId)
         {
             Logging.log("Added a page to album " + albumId.ToString());

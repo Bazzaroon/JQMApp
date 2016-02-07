@@ -1,6 +1,6 @@
 ﻿
 var quickbox = {    
-    mkUp: "<div class='quickbox'><div><div></div></div><img src='#'></img></div>",
+    mkUp: "<div class='quickbox'><img src='#'></img></div>",
     overlay: "<div class='overlay'></div>",
     scale: 90,
     
@@ -26,11 +26,11 @@ var quickbox = {
             quickbox.CenterBox();
         
             if (jqmView.IsMobile()) {
-                $('.quickbox div:nth-of-type(1)').on('touchstart', function () {
+                $('.quickbox img').on('doubletap', function () {
                     quickbox.Close();
                 });
             } else {
-                $('.quickbox div:nth-of-type(1)').on('click', function () {
+                $('.quickbox img').on('dblclick', function () {
                     quickbox.Close();
                 });
 
@@ -41,11 +41,11 @@ var quickbox = {
     
     CenterBox: function() {
         var QBW = parseInt($('.quickbox').css('width'));
-        var hGap = $(window).width() - QBW;
-        hGap = parseInt((hGap / 2) + 10);
+        var hGap = $(window).width();
+        hGap = parseInt((hGap / 2));
         
         var QBH = parseInt($('.quickbox').css('height'));
-        var vGap = $(window).height() - QBH;
+        var vGap = $(window).height();
         vGap = parseInt(vGap / 2);
 
         $('.quickbox').css({ top: vGap + 'px', left: hGap + 'px' });

@@ -245,6 +245,7 @@
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Images\cover.png" />
     <Content Include="Images\dressbg.jpg" />
+    <Content Include="Images\dressmat.jpg" />
     <Content Include="Images\homepage.jpg" />
     <Content Include="Images\pgBg.png" />
     <Content Include="Images\weddingbg.PNG" />

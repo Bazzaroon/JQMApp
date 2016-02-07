@@ -15,7 +15,7 @@ namespace JQMApp.Models
         public List<Users> GetUserAddresses(int albumId)
         {
             string json = string.Empty;
-            string query = "select * from Users where albumId = " + albumId;
+            string query = "select * from Users where albumId = " + albumId + " and Active = 'true'";
 
             var userNames = ExecuteObject<Users>(query);
             json = JsonConvert.SerializeObject(userNames);

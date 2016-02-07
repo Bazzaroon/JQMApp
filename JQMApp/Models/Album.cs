@@ -38,9 +38,29 @@ namespace JQMApp.App.Models
             }
         }
 
-        public void RemovePage()
+        public void RemovePage(int albumId, int pageNumber)
         {
-            
+            using (SqlConnection con = new SqlConnection(SqlDataConnection.Connect()))
+            {
+                using (var cmd = new SqlCommand("RemovePage", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.Add(new SqlParameter("@albumId", albumId));
+                    cmd.Parameters.Add(new SqlParameter("@pageNumber", pageNumber));
+
+                    try
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                    catch (Exception)
+                    {
+                        con.Close();
+                    }
+                }
+            }
         }
 
         public void Update(string album)

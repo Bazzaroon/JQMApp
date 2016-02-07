@@ -19,7 +19,7 @@
 
         <input type="button" id="gotopage" data-inline="true" data-theme="b" value="Goto Page" data-icon="plus" onclick="GotoPage()" />
         <input type="button" id="addpage" data-inline="true" data-theme="b" value="Add Page" data-icon="plus" onclick="AddAPage()"/>
-        <input type="button" id="removepage" data-inline="true" data-theme="b" value="Remove Page" data-icon="plus" />
+        <input type="button" id="removepage" data-inline="true" data-theme="b" value="Remove Page" data-icon="plus" onclick="RemovePage()"/>
     </div>
 
 <script>
@@ -56,6 +56,23 @@
                 $('#pages-slider').val(parseInt(global.Album[0].PageCount));
                 pages.Add();
                 GotoPage();
+            }
+        });
+    }
+    function RemovePage() {
+        var album = JSON.parse($.cookie('album'));
+        if (!confirm('Remove page permanently?')) return;
+        $.ajax({
+            url: $.cookie('location') + "Data/RemovePage?albumId=" + album[0].Id + "&pageNumber=" + $('#pages-slider').val(),
+            async: false,
+            type: 'get',
+            error: function() {
+                alert('Unable to remove page');
+            },
+            success: function() {
+                var pgCount = parseInt(album[0].PageCount) - 1;
+                FillPageList();
+                $.mobile.changePage('#editchoices', { pageReload: true });
             }
         });
     }

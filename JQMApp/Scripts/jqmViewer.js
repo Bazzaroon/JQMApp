@@ -147,11 +147,11 @@ var jqmView = {
 
             $(el).append(mkUp);
             if (jqmView.IsMobile()) {
-                $('#pic' + pgNum +x).on('touchstart', function() {
+                $('#pic' + pgNum +x).on('doubletap', function() {
                     jqmView.OpenLightBox($(this));
                 });
             } else {
-                $('#pic' + pgNum + x).on('click', function () {
+                $('#pic' + pgNum + x).on('dblclick', function () {
                     jqmView.OpenLightBox($(this));
                 });
 
