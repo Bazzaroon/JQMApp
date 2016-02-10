@@ -21,6 +21,19 @@ namespace JQMApp.Controllers
             return View();
         }
 
+        [HttpPost]
+        public void SqlUpdate()
+        {
+            string iStr = string.Empty;
+            using (var reader = new StreamReader(HttpContext.Request.InputStream))
+            {
+                iStr = reader.ReadToEnd();
+            }
+
+            var data = new WeddingData();
+            data.SqlUpdate(iStr);
+        }
+        
         [HttpGet]
         public string GetAlbumDetails(int albumId)
         {

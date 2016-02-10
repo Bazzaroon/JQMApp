@@ -51,10 +51,11 @@ namespace JQMApp.App.Models
 
         public IEnumerable<GraphicItem> GetAllForUser(int userId, int count)
         {
+            var topCount = count == 0 ? "" : " top " + count.ToString(); 
             string query = string.Empty;
             if (userId == 0)
             {
-                query = "select top " + count + " * from Graphic order by CaptureDate DESC";
+                query = "select " + topCount + " * from Graphic order by CaptureDate DESC";
             }
             else
             {

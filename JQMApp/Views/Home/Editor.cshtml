@@ -71,8 +71,7 @@
             },
             success: function() {
                 var pgCount = parseInt(album[0].PageCount) - 1;
-                FillPageList();
-                $.mobile.changePage('#editchoices', { pageReload: true });
+                location.href = $.cookie('location');
             }
         });
     }

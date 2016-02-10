@@ -182,7 +182,7 @@ namespace JQMApp.Controllers
             request.Proxy = null;
             request.UseBinary = true;
             string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"];
-            if (hostName == "192.168.0.19" || hostName == "localhost")
+            if (hostName == "192.168.0.4" || hostName == "localhost")
             {
                 request.Credentials = new NetworkCredential("Barry Tait", "repro20");
             }
@@ -218,7 +218,7 @@ namespace JQMApp.Controllers
             request.Proxy = null;
             request.UseBinary = true;
             string hostName = HttpContext.Request.ServerVariables["HTTP_HOST"];
-            if (hostName == "192.168.0.19" || hostName == "localhost")
+            if (hostName == "192.168.0.4" || hostName == "localhost")
             {
                 request.Credentials = new NetworkCredential("Barry Tait", "repro20");
             }

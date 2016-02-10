@@ -3,14 +3,15 @@
         <h1>Settings</h1>
         <a href="#" data-rel="back" data-theme="b" data-icon="back">Back</a>
     </div>
-    <div data-role="collapsible" data-theme="b" class="ui-content">
+    <div id="settingsheader" data-role="collapsible" data-theme="b" class="ui-content">
         <h3>Settings</h3>
         <p>Maximum number of slides in slideshow</p>
         <input id="slides" type="number" style="width:150px" />    
         <label data-inline="true">
             <input id='stopusers' data-theme="b" type="checkbox" checked>Disallow further users</input>
         </label>
-        <input data-inline="true" type="button" value="Update" onclick="albumManager.Update()" data-theme="b" />
+        <input data-inline="true" type="button" value="Update" onclick="albumManager.SlideUpdate()" data-theme="b" />
+        <div id="slidemsg" data-inline="true" style="color:Red"></div>
         <hr/>
         <div data-role="collapsible" class="ui-content" data-theme="b">
             <h3>Choose an existing home page image</h3>
@@ -41,19 +42,23 @@
         },
         Display: function() {
             for(var x=0;x < userManager.Data.length; x++) {
-                var mkUp = "<div data-role='collapsible' data-theme='b' style='background-color:#ccc'><h3>" + userManager.Data[x].UserName + "</h3>";
+                var mkUp = "<div id='userheader" + x + "' data-role='collapsible' data-theme='b' style='background-color:#ccc'><h3>" + userManager.Data[x].UserName + "</h3>";
                 mkUp += "<table class='useredit'><tr>";
                 mkUp += "<td style='font-weight:bold'>User Name</td><td id='username' style='width:250px;padding-right:15px'><input id='uname" + x + "' type='text' value='" + userManager.Data[x].UserName + "' /></td>";
                 mkUp += "<td style='font-weight:bold'>Email Address</td><td style='width:250px;padding-right:15px'><input id='email" + x + "' type='text' value='" + userManager.Data[x].Email + "' /></td>";
                 var CB1 = userManager.Data[x].Administrator == true ? ' checked ' : '';
-                mkUp += "<td style='font-weight:bold'>&nbsp;Adminstrator</td><td style='width:100px'><input id='cbox" + x + "' style='transform:scale(2)' type='checkbox' " + CB1 + "/></td>";
+                mkUp += "<td style='font-weight:bold'>&nbsp;Adminstrator</td><td style='width:100px'><input id='cbox" + x + "' style='-webkit-transform:scale(2)' type='checkbox' " + CB1 + "/></td>";
                 var CB2 = userManager.Data[x].Active == true ? ' checked ' : '';
-                mkUp += "<td style='font-weight:bold'>&nbsp;Active</td><td style='width:100px'><input id='active" + x + "' style='transform:scale(2)' type='checkbox' " + CB2 + "/></td>";
+                mkUp += "<td style='font-weight:bold'>&nbsp;Active</td><td style='width:100px'><input id='active" + x + "' style='-webkit-transform:scale(2)' type='checkbox' " + CB2 + "/></td>";
                 mkUp += "<td><input onclick=userManager.UpdateUser(" + x + ") data-theme='b' type='button' value='Update'/></td>";
                 mkUp += "<td id='err" + x + "' style='color:Red'></td>";
                 mkUp += "</tr></table></div>";
                 mkUp += "<input id='userid" + x + "' type='hidden' value='" + userManager.Data[x].Id + "'></input>";
                 $('#userset').append(mkUp);
+                $('#userheader' + x).bind('collapse', { dex: x }, function (event) {
+                    var data = event.data;
+                    $('#err' + data.dex).html('');
+                });
             }
         },
         UpdateUser: function(index) {
@@ -81,6 +86,7 @@
 
     var albumManager = {        
         userData: JSON.parse($.cookie('userdata')),
+        albumData: JSON.parse($.cookie('album')),
         Update: function() {
             var album = JSON.parse($.cookie('album'));
             album.Slides = $('#slides').val();
@@ -93,6 +99,21 @@
             });
         },
 
+        GetSlideCount: function() {
+            var query = 'Data/GetAlbumDetails?albumId=' + albumManager.albumData[0].Id;
+            var aDetails = jax.GetData(query);
+            $('#slides').val(aDetails[0].Slides);
+            $('#stopusers').prop('checked', aDetails[0].StopUsers);
+        },
+        SlideUpdate: function() {
+            var Q = "update album set Slides = " + $('#slides').val() + ", StopUsers = '" + $('#stopusers').prop('checked') + "' where Id = " + albumManager.albumData[0].Id;
+            if (jax.UpdateData(Q)) {
+                $('#slidemsg').text('Album updated');
+            } else {
+                $('#slidemsg').text('Unable to update album');
+            }
+        },
+        
         GetData: function () {
             var URL = $.cookie('location') + 'Data/GetHomePageImages?albumId=' + albumManager.userData.AlbumId;
             $.ajax({
@@ -141,6 +162,10 @@
     $(document).ready(function () {
         userManager.GetAll();
         albumManager.GetData();
+        albumManager.GetSlideCount();
+        $('#settingsheader').bind('collapse', function() {
+            $('#slidemsg').text('');
+        });
 
     });
 </script>

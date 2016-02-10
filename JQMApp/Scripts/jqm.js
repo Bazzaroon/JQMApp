@@ -37,6 +37,24 @@ var jax = {
 
         return json;
 
+    },
+    UpdateData: function(sqlStr) {
+        var returnValue = false;
+        $.ajax({
+            url: $.cookie('location') + 'Data/SqlUpdate',
+            type: 'post',
+            async: false,
+            data: sqlStr,
+            error:function() {
+                alert('Unable to update data');
+                return '';
+            },
+            success: function() {
+                returnValue = true;
+            }
+        });
+
+        return returnValue;
     }
 };
 

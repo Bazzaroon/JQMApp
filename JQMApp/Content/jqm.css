@@ -17,7 +17,10 @@
     width: 100%;
 }
 #home {
-    /*background: url(../Images/homepage.jpg) no-repeat top center fixed;*/
+  -moz-background:  no-repeat top center fixed;
+  -webkit-background:  no-repeat top center fixed;
+  -o-background:  no-repeat top center fixed;
+  background:  no-repeat top center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

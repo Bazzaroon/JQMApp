@@ -12,6 +12,26 @@ namespace JQMApp.Models
     {
         readonly string _connStr = System.Configuration.ConfigurationManager.ConnectionStrings["weddingconnection"].ToString();
 
+        public void SqlUpdate(string sql)
+        {
+            using (SqlConnection con = new SqlConnection(SqlDataConnection.Connect()))
+            {
+                using (var cmd = new SqlCommand(sql, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+                    catch (SqlException sqlException)
+                    {
+                        con.Close();
+                    }
+                }
+            }
+        }
+        
         public List<Users> GetUserAddresses(int albumId)
         {
             string json = string.Empty;
