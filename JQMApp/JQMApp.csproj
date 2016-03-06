@@ -133,6 +133,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AlbumController.cs" />
+    <Compile Include="Controllers\AppSettingsController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrientationController.cs" />
@@ -142,6 +143,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Album.cs" />
+    <Compile Include="Models\AlbumSettings.cs" />
     <Compile Include="Models\GraphicItem.cs" />
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\Photo.cs" />
@@ -159,21 +161,19 @@
     <Content Include="Content\images\icons-18-white.png" />
     <Content Include="Content\images\icons-36-black.png" />
     <Content Include="Content\images\icons-36-white.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_glass_55_f8da4e_1x400.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_glass_75_79c9ec_1x400.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_gloss-wave_45_e14f1c_500x100.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_gloss-wave_50_0078ae_500x100.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_highlight-soft_45_0078ae_1x100.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_highlight-soft_75_2191c0_1x100.png" />
-    <Content Include="Content\JQ-UI\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_0078ae_256x240.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_056b93_256x240.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_d8e7f3_256x240.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_e0fdff_256x240.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_f5e175_256x240.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_f7a50d_256x240.png" />
-    <Content Include="Content\JQ-UI\images\ui-icons_fcd113_256x240.png" />
+    <Content Include="Content\JQ-UI\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
+    <Content Include="Content\JQ-UI\images\ui-bg_glass_100_e4f1fb_1x400.png" />
+    <Content Include="Content\JQ-UI\images\ui-bg_highlight-hard_100_f2f5f7_1x100.png" />
+    <Content Include="Content\JQ-UI\images\ui-bg_highlight-hard_70_929292_1x100.png" />
+    <Content Include="Content\JQ-UI\images\ui-bg_highlight-soft_25_ffef8f_1x100.png" />
+    <Content Include="Content\JQ-UI\images\ui-bg_highlight-soft_50_0386ca_1x100.png" />
+    <Content Include="Content\JQ-UI\images\ui-icons_2694e8_256x240.png" />
+    <Content Include="Content\JQ-UI\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\JQ-UI\images\ui-icons_3d80b3_256x240.png" />
+    <Content Include="Content\JQ-UI\images\ui-icons_72a7cf_256x240.png" />
+    <Content Include="Content\JQ-UI\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\JQ-UI\jquery-ui.css" />
+    <Content Include="Content\jqmdt.css" />
     <Content Include="Content\jqm.css" />
     <Content Include="Content\jquery.mobile-1.1.2.min.css" />
     <Content Include="Content\jquery.mobile.slider.css" />
@@ -252,6 +252,7 @@
     <Content Include="Images\pgBg.png" />
     <Content Include="Images\weddingbg.PNG" />
     <Content Include="Scripts\2.3.0-crypto-sha1.js" />
+    <Content Include="Scripts\desktop.js" />
     <Content Include="Scripts\jqm.js" />
     <Content Include="Scripts\jqmViewer.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -311,6 +312,8 @@
     <Content Include="Views\Orientation\Index.cshtml" />
     <Content Include="Views\Home\GetPreview.cshtml" />
     <Content Include="Views\Home\Settings.cshtml" />
+    <Content Include="Views\AppSettings\Index.cshtml" />
+    <Content Include="Views\Shared\_Desktop.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

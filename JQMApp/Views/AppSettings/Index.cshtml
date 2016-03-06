@@ -1,0 +1,94 @@
+﻿@using Newtonsoft.Json
+@model JQMApp.Models.AlbumSettings
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Desktop.cshtml";
+    int dex = 0;
+}
+
+
+<div class="header">Settings</div>
+<form id="albumdata">
+    <div class="albumdetails">
+        @Html.LabelFor(x => x.album.Name)
+        @Html.TextBoxFor(x => x.album.Name, new { style = "width:300px" })
+        @Html.LabelFor(x => x.album.Slides)
+        @Html.TextBoxFor(x => x.album.Slides, new { style = "width:100px" })
+        @Html.Label("No more Users", new { style = "margin-right: 10px" })
+        @Html.CheckBoxFor(x => x.album.StopUsers, new { style = "transform:scale(2)" })
+        <div class="albumdetails" id="updatebutton"><input style="float:right" class="updatebtn" type="button" value="Update" onclick="desktop.UpdateAlbumById(@Model.album.Id,'albumdata')" /></div>
+    </div>
+</form>
+
+<div class="albumdetails">
+    <form id="uploader" method="post" enctype="multipart/form-data" action="http://@Request.ServerVariables["HTTP_HOST"]/JQMApp/Home/AddImage">
+        <input id="uploadfile" name="uploadfile" type="file" value="Upload" style="display:none" />
+        <input type="button" value="Upload Home Page Image" class="uploadbtn" />
+        @Html.TextBoxFor(x => x.album.CoverImage, new { style = "width:400px;border:none" })
+        <input type="hidden" value="homepage" name="userid" id="userid" />
+        <input type="hidden" value="@Model.album.Id" name="albumid" id="albumid" />
+    </form>
+</div>
+<div id="homepages">
+    <h3>Home Page Images</h3>
+    <div id="imagelist">
+        <table>
+            @foreach (var item in Model.GraphicItems)
+            {
+                <tr><td><img height="100" src="@item.Url"/></td><td style="padding-left:20px"><a href="javascript:desktop.ChangeHomePage('@item.Url')">@item.Url</a></td></tr>
+            }
+        </table>
+    </div>
+</div>
+<div id="users">
+    <h3>Users</h3>
+    <div id="userlist">
+        <table>
+            <th>Email</th><th>Username</th><th>Active</th><th>Admin</th>
+            @foreach (var usr in Model.Users)
+            {
+                string fName = "urecord" + dex;
+                    <tr id="@fName"><td>@usr.Email</td>
+                        <td><input id="uname" style="width:250px" type="text" value="@usr.UserName" /></td>
+                        <td align="center">@Html.CheckBox("active", usr.Active, new {style="transform:scale(2)"})</td>
+                        <td align="center">@Html.CheckBox("admin", usr.Administrator, new {style="transform:scale(2)"})</td>
+                        <td><input class="updatebtn" style="float:right" type="button" value="Update" onclick="desktop.UpdateUserRecord(@dex,@usr.Id)"/></td>
+                        <td id="usrmsg" style="padding-left:20px"></td></tr>
+                dex++;
+            }
+        </table>
+    </div>
+</div>
+
+
+<div class="albumdetails" id="updatebutton"><input style="float:right" class="updatebtn" type="button" value="Close" onclick="BackToMenu()" /></div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#homepages').accordion({
+            collapsible: true,
+            active:false
+        });
+
+        $('#users').accordion({
+            collapsible: true,
+            active: false
+        });
+
+    });
+
+    $('.uploadbtn').on('click', function () {
+        $('#uploadfile').trigger('click');
+    });
+    $('#uploadfile').on('change', function() {
+        $('#uploader').submit();
+    });
+    
+
+    function BackToMenu() {
+        location.href = $.cookie('location') + "?mode=back";
+    }
+
+</script>

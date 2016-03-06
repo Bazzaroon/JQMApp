@@ -137,6 +137,8 @@ namespace JQMApp.Controllers
             {
                 dataModel.Add(string.Concat("Images/", HomePageFileName), albumId, userId);
                 PostFileViaFtp(buffer, HomePageFileName);
+                var album = new Album();
+                album.UpdateHomePage("Images/" + HomePageFileName, albumId);
             }
             else
             {
@@ -154,8 +156,14 @@ namespace JQMApp.Controllers
             
             JObject J = JObject.Parse(cookie);
 
-            return RedirectToAction("Index", "SiteUser", new {id = (int)J["Id"]});
-
+            if (Request.Form["userid"] == "homepage")
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("Index", "SiteUser", new {id = (int) J["Id"]});
+            }
         }
 
         private void CreatePreviewThumb(Stream fileData, string fileName)

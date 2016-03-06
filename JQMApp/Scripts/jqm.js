@@ -1,4 +1,4 @@
-﻿var album = null;
+﻿var Album = null;
 var global = {
     imageId: -1,
     Album: null,
@@ -318,7 +318,7 @@ var editor = {
 
         switch (pos) {
             case 'next':
-                pgTo = pgnum >= album[0].PageCount ? pgnum : pgnum + 1;
+                pgTo = pgnum >= Album[0].PageCount ? pgnum : pgnum + 1;
                 break;
         }
     },

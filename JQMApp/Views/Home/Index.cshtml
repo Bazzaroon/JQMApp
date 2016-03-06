@@ -122,8 +122,8 @@
         var query = 'Data/GetAlbumDetails?albumId=' + global.AlbumId;
         global.Album = jax.GetData(query, ' album ');
         $.cookie('album', JSON.stringify(global.Album), { expires: 30, path: '/' });
-        album = $.cookie('album');
-        var _album = JSON.parse(album);
+        Album = $.cookie('album');
+        var _album = JSON.parse(Album);
 
         var modeCheck = @(mode == "back" ?"true":"false");
         if (modeCheck) {
@@ -192,11 +192,11 @@
         $('#llist').empty();
         $('#llist').append("<li><a  rel='external' href='" + $.cookie('location') + "WeddingAlbum'>" + global.Album[0].Name + "</a></li>");
         $('#llist').append("<li><a role-transition='flip' rel='external' href='/JQMApp/Album?slideCount=" + global.Album[0].Slides + "'>Slide Show</a></li>");
-        $('#llist').append("<li><a href='#upload'>Upload Image</a></li>");
+        $('#llist').append("<li><a href='javascript:UploadAnImage()'>Upload Image</a></li>");
         $('#llist').append("<li><a href='javascript:Logout()'>Log Out</a></li>");
        
         if (uData.Administrator && !IsMobile()) {
-            $('#llist').append("<li><a href='#settings'>Settings</a></li>");
+            $('#llist').append("<li><a rel='external' href='/JQMApp/AppSettings'>Settings</a></li>");
         }
         
         $('#llist').listview('refresh', true);
@@ -210,6 +210,14 @@
         $('#emaillist').listview('refresh', true);
 
     }
+    
+    function UploadAnImage() {
+        $('#uploadfile').trigger('click');
+    }
+
+    $('#uploadfile').on('change', function() {
+        $('#uploadform').submit();
+    });
     
     function CloseAlbumList() {
         $.mobile.changePage('#home');

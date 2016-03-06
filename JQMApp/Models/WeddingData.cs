@@ -31,7 +31,15 @@ namespace JQMApp.Models
                 }
             }
         }
-        
+
+        public List<Users> GetAllUsers(int albumId)
+        {
+            string query = "select * from users where AlbumId = " + albumId;
+            var userNames = ExecuteObject<Users>(query).ToList();
+
+            return userNames;
+        }
+
         public List<Users> GetUserAddresses(int albumId)
         {
             string json = string.Empty;
@@ -76,6 +84,12 @@ namespace JQMApp.Models
             return json;
         }
 
+        public List<GraphicItem> GetAllGraphicItems(int albumId)
+        {
+            string query = "select * from graphic where albumid = " + albumId + " and url like '%_home%'";
+            return ExecuteObject<GraphicItem>(query).ToList();
+        }
+
         public string GetAllThumbs(int albumId)
         {
             string json = string.Empty;
@@ -96,6 +110,14 @@ namespace JQMApp.Models
 
             json = JsonConvert.SerializeObject(albumDetails);
             return json;
+        }
+        
+        public Album GetAlbumSettings(int albumId)
+        {
+            string query = "select * from album where Id = " + albumId;
+
+            return ExecuteObject<Album>(query).FirstOrDefault();
+
         }
 
         private SqlDataReader SelectQuery(string query)

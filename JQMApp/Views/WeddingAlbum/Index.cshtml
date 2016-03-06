@@ -8,7 +8,7 @@
 <div id="viewpage" data-role="page">
     <div data-role="header" data-theme="b" data-position="fixed">
         <h1></h1>
-        <a href="javascript:GoHome()" data-rel="external" data-theme="b" data-icon="forward">Back</a>
+        <a href="javascript:GoHome()" data-theme="b" data-icon="forward">Back</a>
     </div>
 
     <div id="pagecontainer" align="center">
@@ -26,10 +26,10 @@
 
 </div>
 <script>
-    var album = JSON.parse($.cookie('album'));
+    var Album = JSON.parse($.cookie('album'));
     
     $(document).ready(function () {
-        album = JSON.parse($.cookie('album'));
+        Album = JSON.parse($.cookie('album'));
         jqmView.Init();
 
         $('#editorpage').click(function() {
@@ -38,8 +38,8 @@
     });
 
     function LoadPages() {
-        pages.Add(album[0].Id);
-        for (var x = 0; x < album[0].PageCount; x++) {
+        pages.Add(Album[0].Id);
+        for (var x = 0; x < Album[0].PageCount; x++) {
             pages.AddPage(x + 1);
         }
 

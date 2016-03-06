@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using JQMApp.App.Models;
@@ -19,6 +20,23 @@ namespace JQMApp.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public void SqlUpdate64()
+        {
+            string iStr = string.Empty;
+            using (var reader = new StreamReader(HttpContext.Request.InputStream))
+            {
+                iStr = reader.ReadToEnd();
+            }
+
+            byte[] strData = Convert.FromBase64String(iStr);
+
+            string decodedString = Encoding.UTF8.GetString(strData);
+            
+            var data = new WeddingData();
+            data.SqlUpdate(decodedString);
         }
 
         [HttpPost]

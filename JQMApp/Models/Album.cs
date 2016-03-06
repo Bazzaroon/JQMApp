@@ -66,13 +66,13 @@ namespace JQMApp.App.Models
         public void Update(string album)
         {
             JObject _album = JObject.Parse(album);
-            string query = "update album set Slides = @slides, CoverImage = @coverimage, StopUsers = @stopusers where Id = @id";
+            string query = "update album set Slides = @slides, CoverImage = @coverimage, StopUsers = @stopusers where id = @id";
 
             using (SqlConnection con = new SqlConnection(SqlDataConnection.Connect()))
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.Add("@id", (int) _album["Id"]);
+                    cmd.Parameters.Add("@id", (int) _album["id"]);
                     cmd.Parameters.Add("@slides", (int) _album["Slides"]);
                     cmd.Parameters.Add("@coverimage", _album["CoverImage"].ToString());
                     cmd.Parameters.Add("@stopusers", (bool) _album["StopUsers"]);
@@ -93,7 +93,7 @@ namespace JQMApp.App.Models
 
         public void UpdateHomePage(string fileName, int albumId)
         {
-            string query = "update album set CoverImage = @coverimage where Id = @albumid";
+            string query = "update album set CoverImage = @coverimage where id = @albumid";
             using (SqlConnection con = new SqlConnection(SqlDataConnection.Connect()))
             {
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -115,6 +115,7 @@ namespace JQMApp.App.Models
                 }
             }
         }
+
 
     }
 

@@ -27,7 +27,7 @@
 }(this, function ($) {
 
   function Lightbox(options) {
-    this.album = [];
+    this.Album = [];
     this.currentImageIndex = void 0;
     this.init();
 
@@ -115,7 +115,7 @@
 
     this.$lightbox.find('.lb-prev').on('click', function() {
       if (self.currentImageIndex === 0) {
-        self.changeImage(self.album.length - 1);
+        self.changeImage(self.Album.length - 1);
       } else {
         self.changeImage(self.currentImageIndex - 1);
       }
@@ -123,7 +123,7 @@
     });
 
     this.$lightbox.find('.lb-next').on('click', function() {
-      if (self.currentImageIndex === self.album.length - 1) {
+      if (self.currentImageIndex === self.Album.length - 1) {
         self.changeImage(0);
       } else {
         self.changeImage(self.currentImageIndex + 1);
@@ -150,11 +150,11 @@
 
     this.sizeOverlay();
 
-    this.album = [];
+    this.Album = [];
     var imageNumber = 0;
 
     function addToAlbum($link) {
-      self.album.push({
+      self.Album.push({
         link: $link.attr('href'),
         title: $link.attr('data-title') || $link.attr('title')
       });
@@ -229,7 +229,7 @@
       var windowHeight;
       var windowWidth;
 
-      $image.attr('src', self.album[imageNumber].link);
+      $image.attr('src', self.Album[imageNumber].link);
 
       $preloader = $(preloader);
 
@@ -271,7 +271,7 @@
       self.sizeContainer($image.width(), $image.height());
     };
 
-    preloader.src          = this.album[imageNumber].link;
+    preloader.src          = this.Album[imageNumber].link;
     this.currentImageIndex = imageNumber;
   };
 
@@ -334,7 +334,7 @@
 
     this.$lightbox.find('.lb-nav').show();
 
-    if (this.album.length > 1) {
+    if (this.Album.length > 1) {
       if (this.options.wrapAround) {
         if (alwaysShowNav) {
           this.$lightbox.find('.lb-prev, .lb-next').css('opacity', '1');
@@ -347,7 +347,7 @@
             this.$lightbox.find('.lb-prev').css('opacity', '1');
           }
         }
-        if (this.currentImageIndex < this.album.length - 1) {
+        if (this.currentImageIndex < this.Album.length - 1) {
           this.$lightbox.find('.lb-next').show();
           if (alwaysShowNav) {
             this.$lightbox.find('.lb-next').css('opacity', '1');
@@ -363,10 +363,10 @@
 
     // Enable anchor clicks in the injected caption html.
     // Thanks Nate Wright for the fix. @https://github.com/NateWr
-    if (typeof this.album[this.currentImageIndex].title !== 'undefined' &&
-      this.album[this.currentImageIndex].title !== '') {
+    if (typeof this.Album[this.currentImageIndex].title !== 'undefined' &&
+      this.Album[this.currentImageIndex].title !== '') {
       this.$lightbox.find('.lb-caption')
-        .html(this.album[this.currentImageIndex].title)
+        .html(this.Album[this.currentImageIndex].title)
         .fadeIn('fast')
         .find('a').on('click', function(event) {
           if ($(this).attr('target') !== undefined) {
@@ -377,8 +377,8 @@
         });
     }
 
-    if (this.album.length > 1 && this.options.showImageNumberLabel) {
-      var labelText = this.imageCountLabel(this.currentImageIndex + 1, this.album.length);
+    if (this.Album.length > 1 && this.options.showImageNumberLabel) {
+      var labelText = this.imageCountLabel(this.currentImageIndex + 1, this.Album.length);
       this.$lightbox.find('.lb-number').text(labelText).fadeIn('fast');
     } else {
       this.$lightbox.find('.lb-number').hide();
@@ -393,13 +393,13 @@
 
   // Preload previous and next images in set.
   Lightbox.prototype.preloadNeighboringImages = function() {
-    if (this.album.length > this.currentImageIndex + 1) {
+    if (this.Album.length > this.currentImageIndex + 1) {
       var preloadNext = new Image();
-      preloadNext.src = this.album[this.currentImageIndex + 1].link;
+      preloadNext.src = this.Album[this.currentImageIndex + 1].link;
     }
     if (this.currentImageIndex > 0) {
       var preloadPrev = new Image();
-      preloadPrev.src = this.album[this.currentImageIndex - 1].link;
+      preloadPrev.src = this.Album[this.currentImageIndex - 1].link;
     }
   };
 
@@ -423,13 +423,13 @@
     } else if (key === 'p' || keycode === KEYCODE_LEFTARROW) {
       if (this.currentImageIndex !== 0) {
         this.changeImage(this.currentImageIndex - 1);
-      } else if (this.options.wrapAround && this.album.length > 1) {
-        this.changeImage(this.album.length - 1);
+      } else if (this.options.wrapAround && this.Album.length > 1) {
+        this.changeImage(this.Album.length - 1);
       }
     } else if (key === 'n' || keycode === KEYCODE_RIGHTARROW) {
-      if (this.currentImageIndex !== this.album.length - 1) {
+      if (this.currentImageIndex !== this.Album.length - 1) {
         this.changeImage(this.currentImageIndex + 1);
-      } else if (this.options.wrapAround && this.album.length > 1) {
+      } else if (this.options.wrapAround && this.Album.length > 1) {
         this.changeImage(0);
       }
     }

@@ -140,22 +140,7 @@
             $('#uploadfile').click();
         },
         
-        ChangeHomePage: function(url) {
-            var wedAlbum = JSON.parse($.cookie('album'));
-            var URL = $.cookie('location') + 'Data/UpdateHomePage?fileName=' + url + "&albumId=" + wedAlbum[0].Id;
-            $.ajax({
-                url: URL,
-                async: false,
-                type: 'get',
-                error: function() {
-                    alert('Unable to change album home page');
-                },
-                success: function() {
-                    location.href = $.cookie('location');
-                }
-        });
 
-        }
         
     };
     
