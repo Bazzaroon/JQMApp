@@ -33,7 +33,7 @@
     <div id="home" data-role="page" data-theme="b" data-content-theme="b" data-cache="false">
         <div data-role="header" data-theme="b" data-position="fixed" data-inline="true">
             <h1></h1>
-            <a id="loginbutton" href="#login" data-icon="forward" class="ui-btn-right">&nbsp;Log In&nbsp;</a>
+            <a id="loginbutton" href="javascript:Login()" data-icon="forward" class="ui-btn-right">&nbsp;Log In&nbsp;</a>
             <a id="viewbutton" href="javascript:FillUserList()" data-icon="forward" class="ui-btn-left">&nbsp;View&nbsp;</a>
             <a id="editbutton" data-position="inline" href="javascript:FillPageList()" data-icon="forward" style="display:none" class="ui-btn-right">&nbsp;Edit&nbsp;</a>
         </div>
@@ -145,8 +145,9 @@
                 $('#editbutton').show();
             }
         } else {
-            $('#viewbutton').hide();
-        }
+                $('#viewbutton').hide();
+                HelpMessage();
+            }
         
         var validNavigator = false;
         if (navigator.userAgent.indexOf('Chrome') > -1 || navigator.userAgent.indexOf('Safari') > -1 || navigator.userAgent.indexOf('Trident') > -1 || navigator.userAgent.indexOf('Firefox') > -1) validNavigator = true;
@@ -292,6 +293,26 @@
                 $.mobile.changePage('#login');
             }
         });
+    }
+    
+    function HelpMessage() {
+        var wdth =  parseInt($(window).width() * 95 / 100);
+        var oWidth = wdth > 650 ? 650 : wdth;
+        var lft = parseInt(($(window).width() - oWidth) / 2); 
+
+        var mkUp = "<div class='help'><div class='title'>Welcome to Simon and Gillian's wedding</div><div style='background-color:#c9e4ed'>";
+        mkUp += "<p style='padding-left:4px'>1. Click 'Login' to login or register as a user.</p>";
+        mkUp += "<p style='padding-left:4px'>2. Choose 'View' to display the main menu.</p>";
+        mkUp += "<p style='padding-left:4px'>3. Upload your photos to allow Gill and Simon to use them in their album which you will be able to view by selecting the album item on the menu </p>";
+        mkUp += "</div></div>"
+        $('body').append(mkUp);
+        $('.help').css({ width: wdth, left: lft });
+
+    }
+    
+    function Login() {
+        $('.help').remove();
+        $.mobile.changePage('#login');
     }
 
 </script>

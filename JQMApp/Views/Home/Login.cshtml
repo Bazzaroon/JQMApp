@@ -12,7 +12,6 @@
 <script>
     $(document).ready(function() {
         $('#emailaddress').focus();
-
     $('.register').bind('click', function (event, ui) {
         $.mobile.changePage('#register');
     });
@@ -20,8 +19,9 @@
     $('.login').bind('click', function(event, ui) {
         LoginUser();
     });
-    
-    $('.register').bind('click', function (event, ui) {
+
+
+        $('.register').bind('click', function (event, ui) {
         $.mobile.changePage('#register', { transition: 'pop', role: 'dialog' });
     });
 

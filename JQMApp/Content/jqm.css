@@ -292,3 +292,15 @@
 .colorCasket {
     z-index: 700;
 }
+.help {
+    bottom: 20px;
+    position: absolute;
+    z-index: 200;
+    font-family: Arial;
+    font-size: 11pt;
+    max-width: 650px;
+    opacity: 0.85;
+}
+.help div {
+    padding: 4px 0 4px 0;
+}
