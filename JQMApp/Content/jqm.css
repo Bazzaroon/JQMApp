@@ -304,3 +304,17 @@
 .help div {
     padding: 4px 0 4px 0;
 }
+.closebutton {
+    font-size: 12pt;
+    color: white;
+    background:linear-gradient(#0492fb, #035a9c);
+    width: 140px;
+    height: 30px;
+    margin: 20px 0 0 20px;
+    text-align: center;
+    line-height: 28px;
+    border-radius: 5px;
+    font-family: Arial;
+    text-shadow: 2px 2px #000000;
+    cursor: pointer;
+}
